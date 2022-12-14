@@ -15,19 +15,19 @@ const cartSlice = createSlice({
   reducers: {
     addToCart(state, action) {
       const existingIndex = state.cartItems.findIndex(
-        (item) => item._id === action.payload._id
+        (item) => item._id === action.payload.product._id
       );
-
       if (existingIndex >= 0) {
         state.cartItems[existingIndex] = {
           ...state.cartItems[existingIndex],
-          cartQuantity: state.cartItems[existingIndex].cartQuantity + 1,
+          cartQuantity: state.cartItems[existingIndex].cartQuantity = 1, // bloque la quantité à 1
+          //cartQuantity: state.cartItems[existingIndex].cartQuantity + 1,
         };
         toast.info("Increased product quantity", {
           position: "bottom-left",
         });
       } else {
-        let tempProductItem = { ...action.payload, cartQuantity: 1 };
+        let tempProductItem = { ...action.payload.product, cartQuantity: action.payload.dureeLoc };
         state.cartItems.push(tempProductItem);
         toast.success("Product added to cart", {
           position: "bottom-left",
@@ -52,7 +52,7 @@ const cartSlice = createSlice({
         );
 
         state.cartItems = nextCartItems;
-        
+
         toast.error("Product removed from cart", {
           position: "bottom-left",
         });

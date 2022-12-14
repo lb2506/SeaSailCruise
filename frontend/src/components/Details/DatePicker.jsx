@@ -10,7 +10,7 @@ import { addDays } from 'date-fns'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 
-const DateRangeComp = () => {
+const DateRangeComp = ({ handleChange }) => {
 
   // date state
   const [range, setRange] = useState([
@@ -21,23 +21,6 @@ const DateRangeComp = () => {
     }
   ])
 
-  // Cacul du temps de location
-  var ONE_DAY = 1000 * 60 * 60 * 24;
-
-  var date1_ms = range[0].startDate.getTime();
-  var date2_ms = range[0].endDate.getTime();
-
-  var difference_ms = Math.abs(date1_ms - date2_ms);
-
-  const [locStart, setLocStart] = useState();
-  const [locEnd, setLocEnd] = useState();
-  const [dureeLoc, setDureeLoc] = useState()
-
-  useEffect(()=> {
-    setLocStart(new Date(date1_ms).toLocaleDateString("fr"))
-    setLocEnd(new Date(date2_ms).toLocaleDateString("fr"))
-    setDureeLoc(Math.round(difference_ms/ONE_DAY)+1)
-  }, [range])
 
   // console.log(locStart, locEnd, dureeLoc);
 
@@ -57,7 +40,7 @@ const DateRangeComp = () => {
   // hide dropdown on ESC press
   const hideOnEscape = (e) => {
     // console.log(e.key)
-    if( e.key === "Escape" ) {
+    if (e.key === "Escape") {
       setOpen(false)
     }
   }
@@ -66,7 +49,7 @@ const DateRangeComp = () => {
   const hideOnClickOutside = (e) => {
     // console.log(refOne.current)
     // console.log(e.target)
-    if( refOne.current && !refOne.current.contains(e.target) ) {
+    if (refOne.current && !refOne.current.contains(e.target)) {
       setOpen(false)
     }
   }
@@ -79,14 +62,14 @@ const DateRangeComp = () => {
         value={`${format(range[0].startDate, "dd/MM/yyyy")} au ${format(range[0].endDate, "dd/MM/yyyy")}`}
         readOnly
         className="inputBox"
-        onClick={ () => setOpen(open => !open) }
+        onClick={() => setOpen(open => !open)}
       />
 
       <div ref={refOne}>
-        {open && 
+        {open &&
           <DateRange
             locale={locales['fr']}
-            onChange={item => setRange([item.selection])}
+            onChange={item => (handleChange(item, [item.selection]), setRange([item.selection]))}
             editableDateInputs={true}
             moveRangeOnFirstSelection={false}
             ranges={range}

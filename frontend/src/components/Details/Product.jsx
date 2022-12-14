@@ -8,266 +8,300 @@ import { addToCart } from "../../slices/cartSlice";
 import Slider from './Slider';
 import DateRangeComp from "./DatePicker";
 
+import { addDays } from 'date-fns'
+
 const Product = () => {
 
     const params = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-  
+
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
 
     const [choiceGuide, setChoiceGuide] = useState("");
 
-    useEffect(() =>{
+    const [range, setRange] = useState([
+        {
+            startDate: new Date(),
+            endDate: addDays(new Date(), 1),
+            key: 'selection'
+        }
+    ])
+
+    var ONE_DAY = 1000 * 60 * 60 * 24;
+
+    var date1_ms = range[0].startDate.getTime();
+    var date2_ms = range[0].endDate.getTime();
+
+    var difference_ms = Math.abs(date1_ms - date2_ms);
+
+    const [locStart, setLocStart] = useState();
+    const [locEnd, setLocEnd] = useState();
+    const [dureeLoc, setDureeLoc] = useState()
+
+    const handleChange = (item) => {
+        setRange([item.selection])
+    }
+
+    useEffect(() => {
+        setLocStart(new Date(date1_ms).toLocaleDateString("fr"))
+        setLocEnd(new Date(date2_ms).toLocaleDateString("fr"))
+        setDureeLoc(Math.round(difference_ms / ONE_DAY) + 1)
+    }, [range])
+
+    useEffect(() => {
         setLoading(true)
-        async function fetchData(){
-          try{
-            const res = await axios.get(`${url}/products/find/${params.id}`, setHeaders())
-    
-            setProduct(res.data);
-          } catch(err){
-            console.log(err)
-          }
-          setLoading(false)
+        async function fetchData() {
+            try {
+                const res = await axios.get(`${url}/products/find/${params.id}`, setHeaders())
+
+                setProduct(res.data);
+            } catch (err) {
+                console.log(err)
+            }
+            setLoading(false)
         }
         fetchData()
     }, []);
 
-    const handleAddToCart = (product) => {
-    dispatch(addToCart(product))
-    navigate("/cart")
+    const handleAddToCart = ({ product, dureeLoc }) => {
+        dispatch(addToCart({ product, dureeLoc }))
+        navigate("/cart")
     }
 
-    return(
+    return (
         <StyledProduct>
             <ImageContainer>
-            {loading
-            ?
-            <p>Chargement...</p>
-            :
-            <Slider product={product}/>
-            }            
+                {loading
+                    ?
+                    <p>Chargement...</p>
+                    :
+                    <Slider product={product} />
+                }
             </ImageContainer>
             <ContainerGlobal>
                 <ProductContainer>
                     {loading
-                    ?
-                    <p>Chargement...</p>
-                    :
-                    <>
-                    <ProductDetails>
-                        <div>
-                            <h3>{product.name}</h3>
-                            <p style={{marginTop: '1rem', marginBottom: '1rem'}}>{product.localisation}</p>
-                        </div>
-                        <div>
-                            <ul className="caracteristics">
-                                <li>{product.tailleMax} personnes</li>
-                                <li>{product.horaireStart} / {product.horaireEnd}</li>
-                                <li>{product.power} cv</li>
-                                <li>{product.longueur} mètres</li>
-                                <li>{product.guide}</li>
-                            </ul>
-                        </div>
-                        <div className="about">
-                            <h4>À propos de {product.name} - {product.year}</h4>
-                            <p>{product.desc}</p>
-                        </div>
-                        <div className="details-global">
-                            <h4>Détails</h4>
-                            <ul className="details">
-                                {product.guide === 'Skipper optionnel' ?
-                                <li style={{ marginBottom: '2rem', marginTop: '2rem'}}>Type de location : <span className="bold">Bateau seul</span> ou <span className="bold">Avec skipper</span></li>
-                                :
-                                <li style={{ marginBottom: '2rem', marginTop: '2rem'}}>Type de location : <span className="bold">Bateau seul</span></li>
-                                }
-                                <li style={{ marginBottom: '1rem', marginTop: '1rem'}}>Horaires indicatives de début et fin de location : <span className="bold">{product.horaireStart}</span> / <span className="bold">{product.horaireEnd}</span></li>
-                                <li className="column">
-                                    <p>Modèle : <span className="bold">{product.name}</span></p>
-                                    <p>Armement : <span className="bold">{product.armement}</span></p>
-                                </li>
-                                <li className="column">
-                                    <p>Emplacement : <span className="bold">{product.emplacement}</span></p>
-                                    <p>Longueur (m) : <span className="bold">{product.longueur}</span></p>
-                                </li>
-                                <li className="column">
-                                    <p>Largeur (m) : <span className="bold">{product.largeur}</span></p>
-                                    <p>Tirant d'eau (m) : <span className="bold">{product.tirant_eau}</span></p>
-                                </li>
-                                <li className="column">
-                                    <p>Année de construction : <span className="bold">{product.year}</span></p>
-                                    <p>Capacité autorisée (m) : <span className="bold">{product.tailleMax}</span></p>
-                                </li>
-                                <li className="column">
-                                    <p>Puissance : <span className="bold">{product.power}cv</span></p>
-                                    <p>Type de moteur: <span className="bold">{product.type_moteur}</span></p>
-                                </li>
-                                <li className="column">
-                                    <p>Nombre de moteurs : <span className="bold">{product.nbr_moteur}</span></p>
-                                    <p>Type de carburant : <span className="bold">{product.carburant}</span></p>
-                                </li>
-                                <li className="column">
-                                    <p>Caution : <span className="bold">{product.caution} €</span> (gérée en direct par le propriétaire)</p>
-                                    <p>Conditions d'annulation : <span className="bold">{product.annulation}</span></p>
-                                </li>
-                            </ul>
-                            <div>
-                                <p style={{marginTop: '1rem'}}>Utilisations</p>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.utilisation && product.utilisation.length > 0 && 
-                                            product.utilisation.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key} className="utilisation">{item.name}</p>
-                                            ))            
+                        ?
+                        <p>Chargement...</p>
+                        :
+                        <>
+                            <ProductDetails>
+                                <div>
+                                    <h3>{product.name}</h3>
+                                    <p style={{ marginTop: '1rem', marginBottom: '1rem' }}>{product.localisation}</p>
+                                </div>
+                                <div>
+                                    <ul className="caracteristics">
+                                        <li>{product.tailleMax} personnes</li>
+                                        <li>{product.horaireStart} / {product.horaireEnd}</li>
+                                        <li>{product.power} cv</li>
+                                        <li>{product.longueur} mètres</li>
+                                        <li>{product.guide}</li>
+                                    </ul>
+                                </div>
+                                <div className="about">
+                                    <h4>À propos de {product.name} - {product.year}</h4>
+                                    <p>{product.desc}</p>
+                                </div>
+                                <div className="details-global">
+                                    <h4>Détails</h4>
+                                    <ul className="details">
+                                        {product.guide === 'Skipper optionnel' ?
+                                            <li style={{ marginBottom: '2rem', marginTop: '2rem' }}>Type de location : <span className="bold">Bateau seul</span> ou <span className="bold">Avec skipper</span></li>
+                                            :
+                                            <li style={{ marginBottom: '2rem', marginTop: '2rem' }}>Type de location : <span className="bold">Bateau seul</span></li>
                                         }
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                        <div className="equipements-global">
-                            <h4>Équipements</h4>
-                            <div>
-                                <h5>Navigation</h5>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.navigation && product.navigation.length > 0 && 
-                                            product.navigation.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key}>{item.name}</p>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5>Sanitaire</h5>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.sanitaire && product.sanitaire.length > 0 && 
-                                            product.sanitaire.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key}>{item.name}</p>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5>Confort</h5>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.confort && product.confort.length > 0 && 
-                                            product.confort.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key}>{item.name}</p>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5>Loisir</h5>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.loisir && product.loisir.length > 0 && 
-                                            product.loisir.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key}>{item.name}</p>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                            <div>
-                                <h5>Cuisine</h5>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.cuisine && product.cuisine.length > 0 && 
-                                            product.cuisine.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key}>{item.name}</p>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                            { product.energie && product.energie.length > 0 && 
-                            <div>
-                                <h5>Énergie</h5>
-                                <ul className="equipements">
-                                    <li className="column">
-                                        { product.energie && product.energie.length > 0 && 
-                                            product.energie.map((item, key) => (
-                                            item.isChecked &&
-                                                <p key={key}>{item.name}</p>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                            </div>
-                            }
-                        </div>
-                        <div className="options-global">
-                            <h4 style={{marginBottom:'1rem'}}>Options</h4>
-                            <ul className="equipements">
-                                    <li className="column">
-                                        { product.options && product.options.length > 0 && 
-                                            product.options.map((item, key) => (
-                                            item.isChecked &&
-                                            <div key={key} className="options">
-                                                <p>{item.name}</p>
-                                                <p><span className="bold">{item.prix} €</span> / location</p>
-                                            </div>
-                                            ))            
-                                        }
-                                    </li>
-                                </ul>
-                        </div>
-                    </ProductDetails>
-                    </>
+                                        <li style={{ marginBottom: '1rem', marginTop: '1rem' }}>Horaires indicatives de début et fin de location : <span className="bold">{product.horaireStart}</span> / <span className="bold">{product.horaireEnd}</span></li>
+                                        <li className="column">
+                                            <p>Modèle : <span className="bold">{product.name}</span></p>
+                                            <p>Armement : <span className="bold">{product.armement}</span></p>
+                                        </li>
+                                        <li className="column">
+                                            <p>Emplacement : <span className="bold">{product.emplacement}</span></p>
+                                            <p>Longueur (m) : <span className="bold">{product.longueur}</span></p>
+                                        </li>
+                                        <li className="column">
+                                            <p>Largeur (m) : <span className="bold">{product.largeur}</span></p>
+                                            <p>Tirant d'eau (m) : <span className="bold">{product.tirant_eau}</span></p>
+                                        </li>
+                                        <li className="column">
+                                            <p>Année de construction : <span className="bold">{product.year}</span></p>
+                                            <p>Capacité autorisée (m) : <span className="bold">{product.tailleMax}</span></p>
+                                        </li>
+                                        <li className="column">
+                                            <p>Puissance : <span className="bold">{product.power}cv</span></p>
+                                            <p>Type de moteur: <span className="bold">{product.type_moteur}</span></p>
+                                        </li>
+                                        <li className="column">
+                                            <p>Nombre de moteurs : <span className="bold">{product.nbr_moteur}</span></p>
+                                            <p>Type de carburant : <span className="bold">{product.carburant}</span></p>
+                                        </li>
+                                        <li className="column">
+                                            <p>Caution : <span className="bold">{product.caution} €</span> (gérée en direct par le propriétaire)</p>
+                                            <p>Conditions d'annulation : <span className="bold">{product.annulation}</span></p>
+                                        </li>
+                                    </ul>
+                                    <div>
+                                        <p style={{ marginTop: '1rem' }}>Utilisations</p>
+                                        <ul className="equipements">
+                                            <li className="column">
+                                                {product.utilisation && product.utilisation.length > 0 &&
+                                                    product.utilisation.map((item, key) => (
+                                                        item.isChecked &&
+                                                        <p key={key} className="utilisation">{item.name}</p>
+                                                    ))
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div className="equipements-global">
+                                    <h4>Équipements</h4>
+                                    <div>
+                                        <h5>Navigation</h5>
+                                        <ul className="equipements">
+                                            <li className="column">
+                                                {product.navigation && product.navigation.length > 0 &&
+                                                    product.navigation.map((item, key) => (
+                                                        item.isChecked &&
+                                                        <p key={key}>{item.name}</p>
+                                                    ))
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5>Sanitaire</h5>
+                                        <ul className="equipements">
+                                            <li className="column">
+                                                {product.sanitaire && product.sanitaire.length > 0 &&
+                                                    product.sanitaire.map((item, key) => (
+                                                        item.isChecked &&
+                                                        <p key={key}>{item.name}</p>
+                                                    ))
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5>Confort</h5>
+                                        <ul className="equipements">
+                                            <li className="column">
+                                                {product.confort && product.confort.length > 0 &&
+                                                    product.confort.map((item, key) => (
+                                                        item.isChecked &&
+                                                        <p key={key}>{item.name}</p>
+                                                    ))
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5>Loisir</h5>
+                                        <ul className="equipements">
+                                            <li className="column">
+                                                {product.loisir && product.loisir.length > 0 &&
+                                                    product.loisir.map((item, key) => (
+                                                        item.isChecked &&
+                                                        <p key={key}>{item.name}</p>
+                                                    ))
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div>
+                                        <h5>Cuisine</h5>
+                                        <ul className="equipements">
+                                            <li className="column">
+                                                {product.cuisine && product.cuisine.length > 0 &&
+                                                    product.cuisine.map((item, key) => (
+                                                        item.isChecked &&
+                                                        <p key={key}>{item.name}</p>
+                                                    ))
+                                                }
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    {product.energie && product.energie.length > 0 &&
+                                        <div>
+                                            <h5>Énergie</h5>
+                                            <ul className="equipements">
+                                                <li className="column">
+                                                    {product.energie && product.energie.length > 0 &&
+                                                        product.energie.map((item, key) => (
+                                                            item.isChecked &&
+                                                            <p key={key}>{item.name}</p>
+                                                        ))
+                                                    }
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    }
+                                </div>
+                                <div className="options-global">
+                                    <h4 style={{ marginBottom: '1rem' }}>Options</h4>
+                                    <ul className="equipements">
+                                        <li className="column">
+                                            {product.options && product.options.length > 0 &&
+                                                product.options.map((item, key) => (
+                                                    item.isChecked &&
+                                                    <div key={key} className="options">
+                                                        <p>{item.name}</p>
+                                                        <p><span className="bold">{item.prix} €</span> / location</p>
+                                                    </div>
+                                                ))
+                                            }
+                                        </li>
+                                    </ul>
+                                </div>
+                            </ProductDetails>
+                        </>
                     }
                 </ProductContainer>
                 <RentContainer>
-                    <p style={{textAlign: 'center', marginBottom:'20px'}}>À partir de <span style={{fontWeight:'bold', fontSize:'24px'}}>{product.price?.toLocaleString()} €</span></p>
-                    { choiceGuide === 'Avec skipper' ? 
-                    <>
-                        <div className="guide-infos">
-                            <h4>Supplément skipper</h4>
-                            <h4>250 €</h4>
-                        </div>
-                        <p className="text-muted">À regler sur place</p>
-                    </>
-                    :
-                    null
+                    <p style={{ textAlign: 'center', marginBottom: '20px' }}>À partir de <span style={{ fontWeight: 'bold', fontSize: '24px' }}>{product.price?.toLocaleString()} €</span></p>
+                    {choiceGuide === 'Avec skipper' ?
+                        <>
+                            <div className="guide-infos">
+                                <h4>Supplément skipper</h4>
+                                <h4>{dureeLoc * 250} €</h4>
+                            </div>
+                            <p className="text-muted">À regler sur place</p>
+                        </>
+                        :
+                        null
                     }
-                    <p>Durée</p>
-                    <DateRangeComp /> 
+                    <div style={{ marginBottom: '1rem' }}>
+                        <p>Choix des dates</p>
+                        <DateRangeComp handleChange={handleChange} />
+                        <p>Durée sélectionnée : {dureeLoc === 1 ? `${dureeLoc} jour` : `${dureeLoc} jours`}</p>
+                    </div>
                     <p>Type de location</p>
                     <form>
-                    { product.guide === "Skipper optionnel" ?
-                        <div className="inputOptions-group">
-                            <div>
-                                <input type="radio" value="Avec Skipper" name="option" onChange={() => setChoiceGuide('Avec skipper')}/> Avec Skipper
+                        {product.guide === "Skipper optionnel" ?
+                            <div className="inputOptions-group">
+                                <div>
+                                    <input type="radio" value="Avec Skipper" name="option" onChange={() => setChoiceGuide('Avec skipper')} /> Avec Skipper
+                                </div>
+                                <div>
+                                    <input type="radio" value="Bateau seul" name="option" onChange={() => setChoiceGuide('Bateau seul')} /> Bateau seul
+                                </div>
                             </div>
-                            <div>
-                                <input type="radio" value="Bateau seul" name="option" onChange={() => setChoiceGuide('Bateau seul')}/> Bateau seul
+                            :
+                            <div className="inputOptions-group">
+                                <div>
+                                    <input type="radio" value="Bateau seul" name="option" onChange={() => setChoiceGuide('Bateau seul')} /> Bateau seul
+                                </div>
                             </div>
-                        </div>
-                        :
-                        <div className="inputOptions-group">
-                            <div>
-                                <input type="radio" value="Bateau seul" name="option" onChange={() => setChoiceGuide('Bateau seul')}/> Bateau seul
-                            </div>
-                        </div>
-                    }
+                        }
                     </form>
                     <div className="btn-group">
-                        { choiceGuide === "" ?
-                            <button className="product-add-to-cart" style={{backgroundColor:'#8498d3'}} disabled>Sélectionnez une option</button>
+                        {choiceGuide === "" ?
+                            <button className="product-add-to-cart" style={{ backgroundColor: '#8498d3' }} disabled>Sélectionnez une option</button>
                             :
-                            <button className="product-add-to-cart"  onClick={() => handleAddToCart(product)}>Réserver</button>
+                            <button className="product-add-to-cart" onClick={() => handleAddToCart({ product, dureeLoc })}>Réserver</button>
                         }
                         <p>- Ou -</p>
                         <button className="product-contact">Contacter</button>

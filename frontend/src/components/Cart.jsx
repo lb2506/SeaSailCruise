@@ -16,6 +16,8 @@ const Cart = () => {
   const cart = useSelector((state) => state.cart);
   const auth = useSelector((state) => state.auth);
 
+  console.log(cart);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -23,12 +25,12 @@ const Cart = () => {
     dispatch(getTotals());
   }, [cart, dispatch]);
 
-  const handleAddToCart = (product) => {
-    dispatch(addToCart(product));
-  };
-  const handleDecreaseCart = (product) => {
-    dispatch(decreaseCart(product));
-  };
+  // const handleAddToCart = (product) => {
+  //   dispatch(addToCart(product));
+  // };
+  // const handleDecreaseCart = (product) => {
+  //   dispatch(decreaseCart(product));
+  // };
   const handleRemoveFromCart = (product) => {
     dispatch(removeFromCart(product));
   };
@@ -63,9 +65,9 @@ const Cart = () => {
       ) : (
         <div>
           <div className="titles">
-            <h3 className="product-title">Produit</h3>
-            <h3 className="price">Prix</h3>
-            <h3 className="quantity">Quantité</h3>
+            <h3 className="product-title">Détails de la location</h3>
+            <h3 className="price">Prix à la jounrée</h3>
+            <h3 className="quantity">Nombre de jours</h3>
             <h3 className="total">Total</h3>
           </div>
           <div className="cart-items">
@@ -84,11 +86,11 @@ const Cart = () => {
                   </div>
                   <div className="cart-product-price">{cartItem.price} €</div>
                   <div className="cart-product-quantity">
-                    <button onClick={() => handleDecreaseCart(cartItem)}>
+                    {/* <button onClick={() => handleDecreaseCart(cartItem)}>
                       -
-                    </button>
+                    </button> */}
                     <div className="count">{cartItem.cartQuantity}</div>
-                    <button onClick={() => handleAddToCart(cartItem)}>+</button>
+                    {/* <button onClick={() => handleAddToCart(cartItem)}>+</button> */}
                   </div>
                   <div className="cart-product-total-price">
                     {cartItem.price * cartItem.cartQuantity} €
