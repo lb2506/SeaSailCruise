@@ -65,8 +65,8 @@ const Product = () => {
         fetchData()
     }, []);
 
-    const handleAddToCart = ({ product, dureeLoc }) => {
-        dispatch(addToCart({ product, dureeLoc }))
+    const handleAddToCart = ({ product, dureeLoc, locStart, locEnd, choiceGuide }) => {
+        dispatch(addToCart({ product, dureeLoc, locStart, locEnd, choiceGuide }))
         navigate("/cart")
     }
 
@@ -301,7 +301,7 @@ const Product = () => {
                         {choiceGuide === "" ?
                             <button className="product-add-to-cart" style={{ backgroundColor: '#8498d3' }} disabled>Sélectionnez une option</button>
                             :
-                            <button className="product-add-to-cart" onClick={() => handleAddToCart({ product, dureeLoc })}>Réserver</button>
+                            <button className="product-add-to-cart" onClick={() => handleAddToCart({ product, dureeLoc, locStart, locEnd, choiceGuide })}>Réserver</button>
                         }
                         <p>- Ou -</p>
                         <button className="product-contact">Contacter</button>

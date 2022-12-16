@@ -14,9 +14,8 @@ import PayButton from "./PayButton";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
-  const auth = useSelector((state) => state.auth);
-
   console.log(cart);
+  const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -78,7 +77,15 @@ const Cart = () => {
                     <img src={cartItem.image.url} alt={cartItem.name} />
                     <div>
                       <h3>{cartItem.name}</h3>
-                      <p>{cartItem.desc}</p>
+                      <p>Type de location : {cartItem.choiceGuide}</p>
+                      {cartItem.choiceGuide === 'Avec skipper' ?
+                        <p>Supplément skipper : {cartItem.dureeLocation * 250} € (à régler sur place) </p>
+                        :
+                        null
+                      }
+                      <p>Début de la location : {cartItem.startLocation} </p>
+                      <p>Fin de la location : {cartItem.endLocation}</p>
+                      <p>Durée totale de location : {cartItem.dureeLocation === 1 ? `${cartItem.dureeLocation} jour` : `${cartItem.dureeLocation} jours`}</p>
                       <button onClick={() => handleRemoveFromCart(cartItem)}>
                         Supprimer
                       </button>
@@ -89,11 +96,11 @@ const Cart = () => {
                     {/* <button onClick={() => handleDecreaseCart(cartItem)}>
                       -
                     </button> */}
-                    <div className="count">{cartItem.cartQuantity}</div>
+                    <div className="count">{cartItem.dureeLocation}</div>
                     {/* <button onClick={() => handleAddToCart(cartItem)}>+</button> */}
                   </div>
                   <div className="cart-product-total-price">
-                    {cartItem.price * cartItem.cartQuantity} €
+                    {cartItem.price * cartItem.dureeLocation} €
                   </div>
                 </div>
               ))}
