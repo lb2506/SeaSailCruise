@@ -20,6 +20,7 @@ const DateRangeComp = ({ handleChange }) => {
       key: 'selection'
     }
   ])
+  console.log('toto')
 
 
   // console.log(locStart, locEnd, dureeLoc);
