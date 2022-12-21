@@ -8,6 +8,8 @@
     "@mui/material": "^5.10.12",
     "@mui/x-data-grid": "^5.17.9",
     "@reduxjs/toolkit": "^1.6.1",
+    "@stripe/react-stripe-js": "^1.16.1",
+    "@stripe/stripe-js": "^1.46.0",
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^11.2.7",
     "@testing-library/user-event": "^12.8.3",
@@ -25,6 +27,7 @@
     "react-stripe-checkout": "^2.6.3",
     "react-toastify": "^7.0.4",
     "recharts": "^2.1.16",
+    "stripe": "^11.4.0",
     "styled-components": "^5.3.5",
     "swiper": "^8.4.4",
     "web-vitals": "^1.1.2"
