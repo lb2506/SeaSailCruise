@@ -14,7 +14,7 @@ import PayButton from "./PayButton";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
-  console.log(cart);
+  // console.log(cart);
   const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();

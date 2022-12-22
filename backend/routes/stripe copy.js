@@ -8,26 +8,48 @@ const stripe = Stripe(process.env.STRIPE_KEY);
 
 const router = express.Router();
 
-const calculateOrderAmount = (items) => {
-
-  // console.log(items[0].cartItems)
-
-
-  return items.cartTotal;
-};
-
-router.post("/create-payment-intent", async (req, res) => {
-  const { items } = req.body;
-  // Create a PaymentIntent with the order amount and currency
-  const paymentIntent = await stripe.paymentIntents.create({
-    amount: calculateOrderAmount(items),
-    currency: "eur",
+router.post("/create-checkout-session", async (req, res) => {
+  const customer = await stripe.customers.create({
+    metadata: {
+      userId: req.body.userId,
+      userFirstName: req.body.userFirstName,
+      userLastName: req.body.userLastName,
+    },
   });
 
-  res.send({
-    clientSecret: paymentIntent.client_secret,
+  const line_items = req.body.cartItems.map((item) => {
+
+    return {
+      price_data: {
+        currency: "eur",
+        product_data: {
+          name: item.name,
+          images: [item.image.url],
+          description: item.desc,
+          metadata: {
+            id: item.id,
+          },
+        },
+        unit_amount: item.price * 100,
+      },
+      quantity: item.dureeLocation,
+    };
   });
 
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ["card"],
+    phone_number_collection: {
+      enabled: true,
+    },
+    line_items,
+    mode: "payment",
+    customer: customer.id,
+    success_url: `${process.env.CLIENT_URL}/checkout-success`,
+    cancel_url: `${process.env.CLIENT_URL}/cart`,
+  });
+
+  // res.redirect(303, session.url);
+  res.send({ url: session.url });
 });
 
 // Create order function

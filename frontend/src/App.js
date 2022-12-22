@@ -28,6 +28,7 @@ import UserAccount from "./components/account/UserAccount";
 import UserOrders from "./components/account/UserOrders";
 import UserProfileData from "./components/account/UserProfileData";
 import UserFeedBack from "./components/account/UserFeedBack";
+import Payment from "./components/Payment";
 
 
 
@@ -67,6 +68,7 @@ function App() {
               <Route path="profile" element={<UserProfileData />} />
               <Route path="feedbacks" element={<UserFeedBack />} />
             </Route>
+            <Route path="/checkout" element={<Payment />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
