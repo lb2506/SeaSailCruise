@@ -1,61 +1,95 @@
 const express = require("express");
 const Stripe = require("stripe");
 const { Order } = require("../models/Order");
+const { Product } = require("../models/Product");
 
 require("dotenv").config();
 
 const stripe = Stripe(process.env.STRIPE_KEY);
-
 const router = express.Router();
 
 const calculateOrderAmount = (items) => {
-
-  // console.log(items[0].cartItems)
-
-
-  return items.cartTotal;
+  return items.cartTotal * 100;
 };
 
 router.post("/create-payment-intent", async (req, res) => {
+
   const { items } = req.body;
-  // Create a PaymentIntent with the order amount and currency
+
+  const line_items = items.cartItems.map((item) => {
+    return {
+      id: item._id,
+      name: item.name,
+      dureeLocation: item.dureeLocation,
+      startLocation: item.startLocation,
+      endLocation: item.endLocation,
+      choiceGuide: item.choiceGuide,
+    }
+  })
+
+  // Create a PaymentIntent with the order amount, currency and metadata
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),
     currency: "eur",
+    metadata: {
+      userId: items.userId,
+      userFirstName: items.userFirstName,
+      userLastName: items.userLastName,
+      products: JSON.stringify(line_items),
+    },
   });
 
   res.send({
     clientSecret: paymentIntent.client_secret,
   });
-
 });
+
 
 // Create order function
 
-const createOrder = async (customer, data, line_items) => {
+const createOrder = async (data) => {
 
   const newOrder = new Order({
-    userId: customer.metadata.userId,
-    userFirstName: customer.metadata.userFirstName,
-    userLastName: customer.metadata.userLastName,
-    customerId: data.customer,
-    paymentIntentId: data.payment_intent,
-    products: line_items.data,
-    subtotal: data.amount_subtotal / 100,
-    total: data.amount_total / 100,
-    payment_status: data.payment_status,
+    userId: data.metadata.userId,
+    userFirstName: data.metadata.userFirstName,
+    userLastName: data.metadata.userLastName,
+    products: data.metadata.products,
+    subtotal: data.amount / 100,
+    total: data.amount / 100,
+    payment_status: data.status,
   });
 
   try {
     const savedOrder = await newOrder.save();
-    console.log("Processed Order:", savedOrder);
+    // console.log("Processed Order:", savedOrder);
+    console.log("Commande enregistrée");
   } catch (err) {
     console.log(err);
   }
+
+
+  // ajout de la réservation dans le produit en fonction de l'id du produit
+
+  const productsParse = JSON.parse(data.metadata.products);
+
+  productsParse.forEach(async (product) => {
+    const productId = product.id;
+    const productReservation = await Product
+      .findById
+      (productId);
+
+    if (productReservation) {
+      productReservation.reservation = [...productReservation.reservation, { userId: data.metadata.userId, userFirstName: data.metadata.userFirstName, userLastName: data.metadata.userLastName, startLocation: product.startLocation, endLocation: product.endLocation, dureeLocation: product.dureeLocation, choiceGuide: product.choiceGuide }]
+      await productReservation.save();
+      console.log("Réservation ajoutée au(x) produit(s)");
+    } else {
+      console.log("Product not found");
+    }
+  })
 };
 
-// Stripe webhoook
 
+// Stripe webhoook
 // let endpointSecret = "whsec_5826fea4ea506fb45ee57ce34e23d49630bacf0d7e9c7bd01a90656806e8bbb0"
 
 router.post(
@@ -105,25 +139,8 @@ router.post(
     }
 
     // Handle the checkout.session.completed event
-    if (eventType === "checkout.session.completed") {
-      stripe.customers
-        .retrieve(data.customer)
-        .then(async (customer) => {
-          try {
-            stripe.checkout.sessions.listLineItems(
-              data.id,
-              {},
-              function (err, lineItems) {
-                console.log("line_items", lineItems)
-                createOrder(customer, data, lineItems);
-              }
-            )
-          } catch (err) {
-            console.log(typeof createOrder);
-            console.log(err);
-          }
-        })
-        .catch((err) => console.log(err.message));
+    if (eventType === "payment_intent.succeeded") {
+      createOrder(data);
     }
 
     res.status(200).end();

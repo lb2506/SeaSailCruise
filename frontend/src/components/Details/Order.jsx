@@ -8,9 +8,9 @@ const Order = () => {
     const params = useParams();
 
     const [order, setOrder] = useState({});
-    const [loading, setLoading] = useState(false);  
+    const [loading, setLoading] = useState(false);
 
-    console.log(order);
+    // console.log(order);
 
     useEffect(() => {
         const fetchOrder = async () => {
@@ -28,52 +28,52 @@ const Order = () => {
             }
         };
         fetchOrder();
-    },[params.id])
+    }, [params.id])
 
 
-    return(
-       <StyledOrder>
-        {loading ? (
-            <p>Chargement...</p>
-        ) : (
-            <>
-            <OrdersContainer>
-                <h2>Détails de la commande</h2>
-                <p>
-                    Statut du paiement: {" "}
-                    {order.payment_status === "pending" ? (
-                        <Pending>En attente</Pending>
-                    ) : order.payment_status === "failed" ? (
-                        <Dispatched>Non payé</Dispatched>
-                    ) : order.payment_status === "paid" ? (
-                        <Delivered>Payé</Delivered>  
-                    ) : (
-                        "Ereur"
-                    )}
-                </p>
+    return (
+        <StyledOrder>
+            {loading ? (
+                <p>Chargement...</p>
+            ) : (
+                <>
+                    <OrdersContainer>
+                        <h2>Détails de la commande</h2>
+                        <p>
+                            Statut du paiement: {" "}
+                            {order.payment_status === "pending" ? (
+                                <Pending>En attente</Pending>
+                            ) : order.payment_status === "failed" ? (
+                                <Dispatched>Non payé</Dispatched>
+                            ) : order.payment_status === "paid" || "succeeded" ? (
+                                <Delivered>Payé</Delivered>
+                            ) : (
+                                "Erreur"
+                            )}
+                        </p>
 
-                <h3>Détail produit</h3>
-                <Items>
-                    {order.products?.map((product, index) => (
-                        <Item key={index}>
-                            <span>produit: {product.description}</span>
-                            <span>quantité: {product.quantity}</span>
-                            <span>prix: {((product.amount_subtotal)/product.quantity)/100+" €"}</span>
-                        </Item>
-                    ))}
-                </Items>
-                <div>
-                    <h3>Prix total</h3>
-                    <p>{order.total+" €"}</p>
-                </div>
-                <div>
-                    <h3>Détails client</h3>
-                    <p>{[order.userFirstName+" "+order.userLastName]}</p>
-                </div>
-            </OrdersContainer>
-            </>
-        )}
-       </StyledOrder>
+                        <h3>Détail produit</h3>
+                        <Items>
+                            {order.products?.map((product, index) => (
+                                <Item key={index}>
+                                    <span>produit: {product.description}</span>
+                                    <span>quantité: {product.quantity}</span>
+                                    <span>prix: {((product.amount_subtotal) / product.quantity) / 100 + " €"}</span>
+                                </Item>
+                            ))}
+                        </Items>
+                        <div>
+                            <h3>Prix total</h3>
+                            <p>{order.total + " €"}</p>
+                        </div>
+                        <div>
+                            <h3>Détails client</h3>
+                            <p>{[order.userFirstName + " " + order.userLastName]}</p>
+                        </div>
+                    </OrdersContainer>
+                </>
+            )}
+        </StyledOrder>
     );
 };
 

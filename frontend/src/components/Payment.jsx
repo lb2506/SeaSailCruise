@@ -22,13 +22,13 @@ export default function App() {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-                items: [{
+                items: {
                     cartItems: cart.cartItems,
                     cartTotal: cart.cartTotalAmount,
                     userId: user._id,
                     userFirstName: user.firstName,
                     userLastName: user.lastName,
-                }]
+                },
             }),
         })
             .then((res) => res.json())
