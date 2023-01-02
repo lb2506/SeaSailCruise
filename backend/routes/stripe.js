@@ -67,7 +67,6 @@ const createOrder = async (data) => {
     console.log(err);
   }
 
-
   // ajout de la réservation dans le produit en fonction de l'id du produit
 
   const productsParse = JSON.parse(data.metadata.products);

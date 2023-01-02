@@ -19,6 +19,9 @@ const Product = () => {
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
 
+    const [dateBooked, setDateBooked] = useState([]);
+    const [disabledDates, setDisabledDates] = useState([]);
+
     const [choiceGuide, setChoiceGuide] = useState("");
 
     const [range, setRange] = useState([
@@ -55,8 +58,8 @@ const Product = () => {
         async function fetchData() {
             try {
                 const res = await axios.get(`${url}/products/find/${params.id}`, setHeaders())
-
                 setProduct(res.data);
+                setDateBooked(res.data.reservation)
             } catch (err) {
                 console.log(err)
             }
@@ -64,6 +67,34 @@ const Product = () => {
         }
         fetchData()
     }, []);
+
+    useEffect(() => {
+        dateBooked && dateBooked.map((date) => {
+            const dateStart = date.startLocation;
+            const dateEnd = date.endLocation;
+
+            // convertir dd//mm/yyyy pour trouver les dates entre les deux dates
+            const dateStartSplit = dateStart.split("/");
+            const dateEndSplit = dateEnd.split("/");
+            const dateStartConvert = new Date(dateStartSplit[2], dateStartSplit[1] - 1, dateStartSplit[0]);
+            const dateEndConvert = new Date(dateEndSplit[2], dateEndSplit[1] - 1, dateEndSplit[0]);
+
+            // trouver les dates entre les deux dates
+            const dateStartConvert_ms = dateStartConvert.getTime();
+            const dateEndConvert_ms = dateEndConvert.getTime();
+
+            var difference_ms = Math.abs(dateStartConvert_ms - dateEndConvert_ms);
+            var difference_days = Math.round(difference_ms / ONE_DAY);
+
+            for (let i = 0; i <= difference_days; i++) {
+                disabledDates.push(new Date(dateStartConvert_ms + (i * ONE_DAY)))
+            }
+
+            setDisabledDates([...disabledDates])
+        })
+
+    }, [dateBooked])
+
 
     const handleAddToCart = ({ product, dureeLoc, locStart, locEnd, choiceGuide }) => {
         dispatch(addToCart({ product, dureeLoc, locStart, locEnd, choiceGuide }))
@@ -275,7 +306,10 @@ const Product = () => {
                     }
                     <div style={{ marginBottom: '1rem' }}>
                         <p>Choix des dates</p>
-                        <DateRangeComp handleChange={handleChange} />
+                        <DateRangeComp
+                            handleChange={handleChange}
+                            disabledDates={disabledDates}
+                        />
                         <p>Durée sélectionnée : {dureeLoc === 1 ? `${dureeLoc} jour` : `${dureeLoc} jours`}</p>
                     </div>
                     <p>Type de location</p>

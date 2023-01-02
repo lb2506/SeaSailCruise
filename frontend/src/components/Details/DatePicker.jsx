@@ -10,7 +10,7 @@ import { addDays } from 'date-fns'
 import 'react-date-range/dist/styles.css'
 import 'react-date-range/dist/theme/default.css'
 
-const DateRangeComp = ({ handleChange }) => {
+const DateRangeComp = ({ handleChange, disabledDates }) => {
 
   // date state
   const [range, setRange] = useState([
@@ -76,6 +76,7 @@ const DateRangeComp = ({ handleChange }) => {
             direction="horizontal"
             className="calendarElement"
             minDate={moment().toDate()}
+            disabledDates={disabledDates}
           />
         }
       </div>
