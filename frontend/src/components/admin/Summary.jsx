@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { setHeaders, url } from "../../slices/api";
-import { FaUsers, FaChartBar, FaClipboard} from "react-icons/fa";
+import { FaUsers, FaChartBar, FaClipboard } from "react-icons/fa";
 import Widget from "./summary-components/Widget";
 import Chart from "./summary-components/Chart";
 import Transactions from "./summary-components/Transactions";
@@ -17,27 +17,27 @@ const Summary = () => {
   const [income, setIncome] = useState([]);
   const [incomePerc, setIncomePerc] = useState(0);
 
-  function compare(a, b){
-    if(a._id < b._id){
+  function compare(a, b) {
+    if (a._id < b._id) {
       return 1
     }
-    if(a._id > b._id){
+    if (a._id > b._id) {
       return -1
     }
     return 0;
   }
 
-  useEffect(() =>{
-    async function fetchData(){
-      try{
+  useEffect(() => {
+    async function fetchData() {
+      try {
         const res = await axios.get(`${url}/users/stats`, setHeaders())
 
         res.data.sort(compare)
         setUsers(res.data);
         setUsersPerc(
-            ((res.data[0].total - res.data[1].total) / res.data[1].total) * 100
-          );
-      } catch(err){
+          ((res.data[0].total - res.data[1].total) / res.data[1].total) * 100
+        );
+      } catch (err) {
         console.log(err)
       }
     }
@@ -45,17 +45,16 @@ const Summary = () => {
     fetchData()
   }, []);
 
-  useEffect(() =>{
-    async function fetchData(){
-      try{
+  useEffect(() => {
+    async function fetchData() {
+      try {
         const res = await axios.get(`${url}/orders/stats`, setHeaders())
-
         res.data.sort(compare)
         setOrders(res.data);
         setOrdersPerc(
-            ((res.data[0].total - res.data[1].total) / res.data[1].total) * 100
-          );
-      } catch(err){
+          ((res.data[0].total - res.data[1].total) / res.data[1].total) * 100
+        );
+      } catch (err) {
         console.log(err)
       }
     }
@@ -63,17 +62,17 @@ const Summary = () => {
     fetchData()
   }, []);
 
-  useEffect(() =>{
-    async function fetchData(){
-      try{
+  useEffect(() => {
+    async function fetchData() {
+      try {
         const res = await axios.get(`${url}/orders/income`, setHeaders())
 
         res.data.sort(compare)
         setIncome(res.data);
         setIncomePerc(
-            ((res.data[0].total - res.data[1].total) / res.data[1].total) * 100
-          );
-      } catch(err){
+          ((res.data[0].total - res.data[1].total) / res.data[1].total) * 100
+        );
+      } catch (err) {
         console.log(err)
       }
     }
@@ -83,27 +82,27 @@ const Summary = () => {
 
   const data = [
     {
-      icon : <FaUsers />,
-      digits : users[0]?.total,
-      isMoney : false,
+      icon: <FaUsers />,
+      digits: users[0]?.total,
+      isMoney: false,
       title: "Client(s)",
       color: "rgb(102, 108, 255)",
       bgColor: "rgba(102, 108, 255, 0.12)",
       percentage: usersPerc,
     },
     {
-      icon : <FaClipboard />,
-      digits : orders[0]?.total,
-      isMoney : false,
+      icon: <FaClipboard />,
+      digits: orders[0]?.total,
+      isMoney: false,
       title: "Réservation(s)",
       color: "rgb(38, 198, 249)",
       bgColor: "rgba(38, 198, 249, 0.12)",
       percentage: ordersPerc,
     },
     {
-      icon : <FaChartBar />,
-      digits : income[0]?.total ? income[0]?.total : "",
-      isMoney : true,
+      icon: <FaChartBar />,
+      digits: income[0]?.total ? income[0]?.total : "",
+      isMoney: true,
       title: "CA",
       color: "rgb(253, 181, 40)",
       bgColor: "rgbA(253, 181, 40, 0.12)",

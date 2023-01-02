@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 
 const UserProfile = () => {
 
-   
+
   const params = useParams();
 
   const [user, setUser] = useState({
@@ -18,8 +18,6 @@ const UserProfile = () => {
     isAdmin: false,
     password: "",
   });
-
-  console.log(user);
 
   const [loading, setLoading] = useState(false);
   const [updating, setUpdating] = useState(false);

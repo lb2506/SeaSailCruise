@@ -60,8 +60,8 @@ router.get("/findOne/:id", auth, async (req, res) => {
     const order = await Order.findById(req.params.id);
 
 
-    if(!req.user.isAdmin && req.user._id !== order.userId) 
-    return res.status(403).send("Accès refusé, Non autorisé...");
+    if (!req.user.isAdmin && req.user._id !== order.userId)
+      return res.status(403).send("Accès refusé, Non autorisé...");
 
     res.status(200).send(order);
   } catch (err) {
@@ -77,8 +77,8 @@ router.get("/", isAdmin, async (req, res) => {
 
   try {
     const orders = query
-    ? await Order.find().sort({_id: -1}).limit(4)
-    : await Order.find().sort({_id: -1})
+      ? await Order.find().sort({ _id: -1 }).limit(4)
+      : await Order.find().sort({ _id: -1 })
 
     res.status(200).send(orders);
   } catch (err) {
@@ -90,11 +90,13 @@ router.get("/", isAdmin, async (req, res) => {
 // GET MONTHLY INCOME
 
 router.get("/income", isAdmin, async (req, res) => {
+
   const date = new Date();
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
-  const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
+  const previousMonth = new Date(new Date(lastMonth).setMonth(lastMonth.getMonth() - 1));
 
   try {
+
     const income = await Order.aggregate([
       { $match: { createdAt: { $gte: previousMonth } } },
       {
@@ -110,10 +112,13 @@ router.get("/income", isAdmin, async (req, res) => {
         },
       },
     ]);
+
     res.status(200).send(income);
-  } catch (err) {
+  }
+  catch (err) {
     res.status(500).send(err);
   }
+
 });
 
 // GET 1 WEEK SALES
@@ -147,13 +152,12 @@ router.get("/week-sales", async (req, res) => {
   }
 });
 
-
 // GET ORDERS STATS
 
 router.get("/stats", isAdmin, async (req, res) => {
   const date = new Date();
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
-  const previousMonth = new Date(new Date().setMonth(lastMonth.getMonth() - 1));
+  const previousMonth = new Date(new Date(lastMonth).setMonth(lastMonth.getMonth() - 1));
 
   try {
     const orders = await Order.aggregate([

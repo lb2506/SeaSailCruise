@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Outlet, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
-import {FaUsers, FaStore, FaClipboard, FaTachometerAlt} from "react-icons/fa"
+import { FaUsers, FaShip, FaClipboard, FaTachometerAlt, FaRegCalendarCheck, FaPencilAlt } from "react-icons/fa"
 
 const Dashboard = () => {
   const auth = useSelector((state) => state.auth);
@@ -24,9 +24,17 @@ const Dashboard = () => {
           className={({ isActive }) =>
             isActive ? "link-active" : "link-inactive"
           }
+          to="/admin/calendar"
+        >
+          <FaRegCalendarCheck /> Calendrier
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-active" : "link-inactive"
+          }
           to="/admin/products"
         >
-          <FaStore /> Produits
+          <FaShip /> Bateaux
         </NavLink>
         <NavLink
           className={({ isActive }) =>
@@ -34,7 +42,7 @@ const Dashboard = () => {
           }
           to="/admin/orders"
         >
-          <FaClipboard /> Commandes
+          <FaClipboard /> Réservations
         </NavLink>
         <NavLink
           className={({ isActive }) =>
@@ -42,7 +50,15 @@ const Dashboard = () => {
           }
           to="/admin/users"
         >
-          <FaUsers /> Utilistateurs
+          <FaUsers /> Clients
+        </NavLink>
+        <NavLink
+          className={({ isActive }) =>
+            isActive ? "link-active" : "link-inactive"
+          }
+          to="/admin/contract"
+        >
+          <FaPencilAlt /> Contrat
         </NavLink>
       </SideNav>
       <Content>
@@ -70,7 +86,7 @@ const SideNav = styled.div`
   padding: 2rem;
 
   h3 {
-    margin: 0 0 1rem 0;
+    margin: 0 0 3rem 0;
     padding: 0;
     text-transform: uppercase;
     font-size: 17px;
@@ -78,7 +94,7 @@ const SideNav = styled.div`
 
   a {
     text-decoration: none;
-    margin-bottom: 1rem;
+    margin-bottom: 3rem;
     font-size: 14px;
     display: flex;
     align-items: center;

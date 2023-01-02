@@ -29,7 +29,8 @@ import UserOrders from "./components/account/UserOrders";
 import UserProfileData from "./components/account/UserProfileData";
 import UserFeedBack from "./components/account/UserFeedBack";
 import Payment from "./components/Payment";
-
+import Calendrier from "./components/admin/Calendrier";
+import Contrat from "./components/admin/Contrat";
 
 
 function App() {
@@ -62,6 +63,8 @@ function App() {
               </Route>
               <Route path="users" element={<Users />} />
               <Route path="orders" element={<Orders />} />
+              <Route path="calendar" element={<Calendrier />} />
+              <Route path="contract" element={<Contrat />} />
             </Route>
             <Route path="/account" element={<UserAccount />}>
               <Route path="orders/:userId" element={<UserOrders />} />
