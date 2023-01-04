@@ -11,6 +11,7 @@ const orderSchema = new mongoose.Schema(
     // shipping: { type: Object, required: true },
     order_status: { type: String, default: "pending" },
     payment_status: { type: String, required: true },
+    type: { type: String, required: true },
   },
   { timestamps: true }
 );

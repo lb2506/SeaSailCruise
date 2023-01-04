@@ -31,6 +31,8 @@ import UserFeedBack from "./components/account/UserFeedBack";
 import Payment from "./components/Payment";
 import Calendrier from "./components/admin/Calendrier";
 import Contrat from "./components/admin/Contrat";
+import OrdersList from "./components/admin/list/OrdersList";
+import CreateBooking from "./components/admin/CreateBooking";
 
 
 function App() {
@@ -62,7 +64,10 @@ function App() {
                 <Route path="create-product" element={<CreateProduct />} />
               </Route>
               <Route path="users" element={<Users />} />
-              <Route path="orders" element={<Orders />} />
+              <Route path="orders" element={<Orders />} >
+                <Route index element={<OrdersList />} />
+                <Route path="create-booking" element={<CreateBooking />} />
+              </Route>
               <Route path="calendar" element={<Calendrier />} />
               <Route path="contract" element={<Contrat />} />
             </Route>

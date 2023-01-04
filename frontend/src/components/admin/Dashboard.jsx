@@ -110,5 +110,5 @@ const SideNav = styled.div`
 const Content = styled.div`
   margin-left: 200px;
   padding: 2rem 3rem;
-  width: 100%;
+  width: calc(100% - 200px)
 `;

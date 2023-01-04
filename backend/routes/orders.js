@@ -53,6 +53,7 @@ router.get("/find/:userId", isUser, async (req, res) => {
   }
 });
 
+
 // //GET AN ORDER
 
 router.get("/findOne/:id", auth, async (req, res) => {
@@ -125,8 +126,7 @@ router.get("/income", isAdmin, async (req, res) => {
 
 router.get("/week-sales", async (req, res) => {
   // récupérer les 7 derniers jours
-  const lastWeek = new Date(
-    new Date().setDate(new Date().getDate() - 7)
+  const lastWeek = new Date(new Date().setDate(new Date().getDate() - 7)
   );
 
   try {
@@ -157,7 +157,7 @@ router.get("/week-sales", async (req, res) => {
 router.get("/stats", isAdmin, async (req, res) => {
   const date = new Date();
   const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
-  const previousMonth = new Date(new Date(lastMonth).setMonth(lastMonth.getMonth() - 1));
+  const previousMonth = new Date(new Date(date).setMonth(lastMonth.getMonth() - 1));
 
   try {
     const orders = await Order.aggregate([

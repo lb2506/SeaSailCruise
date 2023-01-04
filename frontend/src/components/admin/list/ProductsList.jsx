@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import * as React from "react";
 import { DataGrid } from '@mui/x-data-grid';
-import {useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { productsDelete } from "../../../slices/productsSlice";
 import EditProduct from "../EditProduct";
@@ -10,7 +10,7 @@ export default function ProductsList() {
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { items } = useSelector((state) => state.products);  
+  const { items } = useSelector((state) => state.products);
 
   const rows = items && items.map(item => {
     return {
@@ -23,19 +23,20 @@ export default function ProductsList() {
   })
 
   const columns = [
-    { field: 'id', headerName: 'ID', width: 220 },
-    { field: 'imageUrl', headerName: 'Image', width: 80, 
-    renderCell: (params) => {
-      return(
-        <ImageContainer>
-          <img src={params.row.imageUrl} alt=''/>
-        </ImageContainer>
-      )
-    }
-  },
+    // { field: 'id', headerName: 'ID', width: 220 },
+    {
+      field: 'imageUrl', headerName: 'Image', width: 80,
+      renderCell: (params) => {
+        return (
+          <ImageContainer>
+            <img src={params.row.imageUrl} alt='' />
+          </ImageContainer>
+        )
+      }
+    },
     { field: 'pName', headerName: 'Nom', width: 130 },
-    { field: 'pDesc', headerName: 'Description', width: 230},
-    { field: 'price', headerName: 'Prix', width: 80},
+    { field: 'pDesc', headerName: 'Description', width: 230 },
+    { field: 'price', headerName: 'Prix', width: 80 },
 
     {
       field: 'actions',
@@ -43,11 +44,11 @@ export default function ProductsList() {
       sortable: false,
       width: 270,
       renderCell: (params) => {
-        return(
+        return (
           <Actions>
-            <Delete onClick={()=> handleDelete(params.row.id)}>Supprimer</Delete>
-            <EditProduct productId= {params.row.id} />
-            <View onClick={()=> navigate(`/product/${params.row.id}`)}>Voir</View>
+            <Delete onClick={() => handleDelete(params.row.id)}>Supprimer</Delete>
+            <EditProduct productId={params.row.id} />
+            <View onClick={() => navigate(`/product/${params.row.id}`)}>Voir</View>
           </Actions>
         )
       }
