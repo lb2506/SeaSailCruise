@@ -29,7 +29,7 @@ const Calendrier = () => {
             items.push({
                 id: order._id + '-' + index,
                 group: order.name,
-                title: reservation.userLastName,
+                title: reservation.userFirstName + ' ' + reservation.userLastName,
                 start_time: new Date(reservation.startLocation.split("/")[2], reservation.startLocation.split("/")[1] - 1, reservation.startLocation.split("/")[0]).getTime(),
                 end_time: new Date(reservation.endLocation.split("/")[2], reservation.endLocation.split("/")[1] - 1, reservation.endLocation.split("/")[0]).getTime() + 86400000,
                 description: order._id + '-' + index,

@@ -19,16 +19,18 @@ export default function UsersList() {
     users.map((user) => {
       return {
         id: user._id,
-        uName: [user.firstName +' '+user.lastName],
+        uName: [user.firstName + ' ' + user.lastName],
         uEmail: user.email,
+        uPhone: user.phone,
         isAdmin: user.isAdmin,
       };
     });
 
   const columns = [
-    { field: "id", headerName: "ID", width: 220 },
+    // { field: "id", headerName: "ID", width: 220 },
     { field: "uName", headerName: "Name", width: 150 },
     { field: "uEmail", headerName: "Email", width: 200 },
+    { field: "uPhone", headerName: "Phone", width: 150 },
     {
       field: "isAdmin",
       headerName: "Role",
@@ -65,8 +67,8 @@ export default function UsersList() {
   };
 
   return (
-    <div style={{ height: 800, width: "100%"}}>
-      <h2 style={{ marginBottom : '20px'}}>Utilisateurs</h2>
+    <div style={{ height: 800, width: "100%" }}>
+      <h2 style={{ marginBottom: '20px' }}>Utilisateurs</h2>
       <DataGrid
         rows={rows}
         columns={columns}

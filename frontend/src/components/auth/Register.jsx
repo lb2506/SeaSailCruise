@@ -13,10 +13,11 @@ const Register = () => {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
     password: "",
   });
 
-  
+
 
   useEffect(() => {
     if (auth._id) {
@@ -51,6 +52,12 @@ const Register = () => {
           type="email"
           placeholder="Adresse email"
           onChange={(e) => setUser({ ...user, email: e.target.value })}
+          required
+        />
+        <input
+          type="text"
+          placeholder="Numéro de téléphone"
+          onChange={(e) => setUser({ ...user, phone: e.target.value })}
           required
         />
         <input

@@ -2,9 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  addToCart,
   clearCart,
-  decreaseCart,
   getTotals,
   removeFromCart,
 } from "../slices/cartSlice";

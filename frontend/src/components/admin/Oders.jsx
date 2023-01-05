@@ -1,4 +1,3 @@
-import OrdersList from "./list/OrdersList";
 import { AdminHeaders, PrimaryButton } from "./CommonStyled";
 import { Outlet, useNavigate } from "react-router-dom";
 

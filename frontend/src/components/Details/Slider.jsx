@@ -10,25 +10,25 @@ import "swiper/modules/navigation/navigation.min.css";
 // import required modules
 import { Navigation, Pagination } from "swiper";
 
-export default function Slider({product}) {
-    if(product.carousel1 && product.carousel2 && product.carousel3){
+export default function Slider({ product }) {
+    if (product.carousel1 && product.carousel2 && product.carousel3) {
         return (
             <>
-            <Swiper
-                slidesPerView={3}
-                spaceBetween={10}
-                loop={true}
-                pagination={{
-                clickable: true
-                }}
-                navigation={true}
-                modules={[Navigation, Pagination]}
-                className="mySwiper"
-            >
-                <SwiperSlide><img src={product.carousel1.url}/></SwiperSlide>
-                <SwiperSlide><img src={product.carousel2.url}/></SwiperSlide>
-                <SwiperSlide><img src={product.carousel3.url}/></SwiperSlide>
-            </Swiper>
+                <Swiper
+                    slidesPerView={3}
+                    spaceBetween={10}
+                    loop={true}
+                    pagination={{
+                        clickable: true
+                    }}
+                    navigation={true}
+                    modules={[Navigation, Pagination]}
+                    className="mySwiper"
+                >
+                    <SwiperSlide><img src={product.carousel1.url} alt='boat' /></SwiperSlide>
+                    <SwiperSlide><img src={product.carousel2.url} alt='boat' /></SwiperSlide>
+                    <SwiperSlide><img src={product.carousel3.url} alt='boat' /></SwiperSlide>
+                </Swiper>
             </>
         );
     } else {

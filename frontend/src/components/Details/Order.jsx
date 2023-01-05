@@ -10,8 +10,6 @@ const Order = () => {
     const [order, setOrder] = useState({});
     const [loading, setLoading] = useState(false);
 
-    // console.log(order);
-
     useEffect(() => {
         const fetchOrder = async () => {
             try {
@@ -20,7 +18,7 @@ const Order = () => {
                     `${url}/orders/findOne/${params.id}`,
                     setHeaders()
                 );
-
+                console.log(res.data);
                 setOrder(res.data);
                 setLoading(false);
             } catch (err) {
@@ -29,7 +27,6 @@ const Order = () => {
         };
         fetchOrder();
     }, [params.id])
-
 
     return (
         <StyledOrder>
@@ -40,10 +37,10 @@ const Order = () => {
                     <OrdersContainer>
                         <h2>Détails de la commande</h2>
                         <p>
-                            Statut du paiement: {" "}
+                            Statut du paiement:
                             {order.payment_status === "pending" ? (
                                 <Pending>En attente</Pending>
-                            ) : order.payment_status === "failed" ? (
+                            ) : order.payment_status === "failed" || "A régler sur place" ? (
                                 <Dispatched>Non payé</Dispatched>
                             ) : order.payment_status === "paid" || "succeeded" ? (
                                 <Delivered>Payé</Delivered>

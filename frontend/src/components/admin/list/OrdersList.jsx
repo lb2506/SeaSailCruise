@@ -47,7 +47,7 @@ export default function OrdersList() {
             }
         },
         { field: 'date', headerName: 'Date', width: 150 },
-        { field: 'type', headerName: 'Type de réservation', width: 150 },
+        { field: 'type', headerName: 'Méthode de réservation', width: 170 },
         {
             field: 'actions',
             headerName: 'Actions',
