@@ -18,7 +18,6 @@ const Order = () => {
                     `${url}/orders/findOne/${params.id}`,
                     setHeaders()
                 );
-                console.log(res.data);
                 setOrder(res.data);
                 setLoading(false);
             } catch (err) {

@@ -7,7 +7,7 @@ const router = require("express").Router();
 //CREATE
 
 router.post("/", isAdmin, async (req, res) => {
-  const { name, year, localisation, emplacement, longueur, largeur, tirant_eau, armement, guide, type_moteur, nbr_moteur, carburant, caution, annulation, horaireStart, horaireEnd, tailleMax, power, desc, navigation, sanitaire, confort, loisir, cuisine, energie, utilisation, options, price, image, carousel1, carousel2, carousel3 } = req.body;
+  const { name, year, localisation, emplacement, longueur, largeur, tirant_eau, armement, guide, type_moteur, nbr_moteur, carburant, caution, annulation, horaireStart, horaireEnd, tailleMax, power, desc, navigation, sanitaire, confort, loisir, cuisine, energie, utilisation, options, price, image, carousel1, carousel2, carousel3, reservation } = req.body;
 
   try {
     if (image) {
@@ -24,7 +24,7 @@ router.post("/", isAdmin, async (req, res) => {
         upload_preset: "seasailcruise",
       });
 
-      if (uploadedResponse && uploadedCarousel1, uploadedCarousel2, uploadedCarousel3) {
+      if (uploadedResponse && uploadedCarousel1 || uploadedCarousel2 || uploadedCarousel3) {
         const product = new Product({
           name,
           year,
@@ -58,6 +58,7 @@ router.post("/", isAdmin, async (req, res) => {
           carousel1: uploadedCarousel1,
           carousel2: uploadedCarousel2,
           carousel3: uploadedCarousel3,
+          reservation,
         });
 
         const savedProduct = await product.save();

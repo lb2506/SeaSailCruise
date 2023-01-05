@@ -67,7 +67,6 @@ export default function OrdersList() {
         },
     ];
 
-
     const handleOrderDispatch = (id) => {
         dispatch(ordersEdit({
             id,
@@ -81,7 +80,6 @@ export default function OrdersList() {
             order_status: "refused",
         }))
     }
-
 
     return (
         <div style={{ height: 800, width: '100%' }}>

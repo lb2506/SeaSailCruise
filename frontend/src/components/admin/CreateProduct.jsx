@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-// import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { PrimaryButton } from "./CommonStyled";
 import { productsCreate } from "../../slices/productsSlice";
-
 
 const CreateProduct = () => {
 
@@ -36,20 +34,19 @@ const CreateProduct = () => {
   const [caution, setCaution] = useState("");
   const [annulation, setAnnulation] = useState("");
 
-
   const [isOpenNavigation, setIsOpenNavigation] = useState(false)
   const [navigation, setNavigation] = useState([
-    {name: "GPS", isChecked: false},
-    {name: "Sondeur", isChecked: false},
-    {name: "Guindeau électrique", isChecked: false},
-    {name: "VHF", isChecked: false},
-    {name: "Speedomètre", isChecked: false},
-    {name: "Compas", isChecked: false},
-    {name: "Sonar", isChecked: false},
-    {name: "Lazy Jacks", isChecked: false},
-    {name: "Safety Harness", isChecked: false},
-    {name: "Lazy Bag", isChecked: false},
-    {name: "Anemometer", isChecked: false},
+    { name: "GPS", isChecked: false },
+    { name: "Sondeur", isChecked: false },
+    { name: "Guindeau électrique", isChecked: false },
+    { name: "VHF", isChecked: false },
+    { name: "Speedomètre", isChecked: false },
+    { name: "Compas", isChecked: false },
+    { name: "Sonar", isChecked: false },
+    { name: "Lazy Jacks", isChecked: false },
+    { name: "Safety Harness", isChecked: false },
+    { name: "Lazy Bag", isChecked: false },
+    { name: "Anemometer", isChecked: false },
   ])
 
   const handleClickNavigation = (e) => {
@@ -61,7 +58,7 @@ const CreateProduct = () => {
     const navigationCopy = [...navigation];
     const foundNavigation = navigation?.find((n) => n.name === nav);
 
-    if (!foundNavigation){
+    if (!foundNavigation) {
       return;
     }
     foundNavigation.isChecked = e.currentTarget.checked;
@@ -70,9 +67,9 @@ const CreateProduct = () => {
 
   const [isOpenSanitaire, setIsOpenSanitaire] = useState(false)
   const [sanitaire, setSanitaire] = useState([
-    {name: "WC", isChecked: false},
-    {name: "Eau douche", isChecked: false},
-    {name: "Salle d'eau", isChecked: false},
+    { name: "WC", isChecked: false },
+    { name: "Eau douche", isChecked: false },
+    { name: "Salle d'eau", isChecked: false },
 
 
   ])
@@ -86,7 +83,7 @@ const CreateProduct = () => {
     const sanitaireCopy = [...sanitaire];
     const foundSanitaire = sanitaire?.find((s) => s.name === san);
 
-    if (!foundSanitaire){
+    if (!foundSanitaire) {
       return;
     }
     foundSanitaire.isChecked = e.currentTarget.checked;
@@ -95,14 +92,14 @@ const CreateProduct = () => {
 
   const [isOpenConfort, setIsOpenConfort] = useState(false)
   const [confort, setConfort] = useState([
-    {name: "Table", isChecked: false},
-    {name: "Bain de soleil", isChecked: false},
-    {name: "Connexion Bluetooth", isChecked: false},
-    {name: "Douche de pont", isChecked: false},
-    {name: "Pont arrière", isChecked: false},
-    {name: "Convertible square", isChecked: false},
-    {name: "Teak cockpit", isChecked: false},
-    {name: "Sprayhood", isChecked: false},
+    { name: "Table", isChecked: false },
+    { name: "Bain de soleil", isChecked: false },
+    { name: "Connexion Bluetooth", isChecked: false },
+    { name: "Douche de pont", isChecked: false },
+    { name: "Pont arrière", isChecked: false },
+    { name: "Convertible square", isChecked: false },
+    { name: "Teak cockpit", isChecked: false },
+    { name: "Sprayhood", isChecked: false },
   ])
 
   const handleClickConfort = (e) => {
@@ -114,7 +111,7 @@ const CreateProduct = () => {
     const confortCopy = [...confort];
     const foundConfort = confort?.find((c) => c.name === con);
 
-    if (!foundConfort){
+    if (!foundConfort) {
       return;
     }
     foundConfort.isChecked = e.currentTarget.checked;
@@ -123,10 +120,10 @@ const CreateProduct = () => {
 
   const [isOpenLoisir, setIsOpenLoisir] = useState(false)
   const [loisir, setLoisir] = useState([
-    {name: "Echelle", isChecked: false},
-    {name: "Haut-parleurs extérieurs", isChecked: false},
-    {name: "Wakeboard", isChecked: false},
-    {name: "Bouée tractée", isChecked: false},
+    { name: "Echelle", isChecked: false },
+    { name: "Haut-parleurs extérieurs", isChecked: false },
+    { name: "Wakeboard", isChecked: false },
+    { name: "Bouée tractée", isChecked: false },
   ])
 
   const handleClickLoisir = (e) => {
@@ -138,7 +135,7 @@ const CreateProduct = () => {
     const loisirCopy = [...loisir];
     const foundLoisir = loisir?.find((l) => l.name === loi);
 
-    if (!foundLoisir){
+    if (!foundLoisir) {
       return;
     }
     foundLoisir.isChecked = e.currentTarget.checked;
@@ -147,25 +144,25 @@ const CreateProduct = () => {
 
   const [isOpenCuisine, setIsOpenCuisine] = useState(false)
   const [cuisine, setCuisine] = useState([
-    {name: "Réfrigérateur", isChecked: false},
-    {name: "Evier", isChecked: false},
-    {name: "Plaque de cuisson", isChecked: false},
-    {name: "Plancha", isChecked: false},
-    {name: "Plaque de gaz", isChecked: false},
+    { name: "Réfrigérateur", isChecked: false },
+    { name: "Evier", isChecked: false },
+    { name: "Plaque de cuisson", isChecked: false },
+    { name: "Plancha", isChecked: false },
+    { name: "Plaque de gaz", isChecked: false },
 
 
   ])
 
-  const handleClickCuisine= (e) => {
+  const handleClickCuisine = (e) => {
     e.preventDefault()
     setIsOpenCuisine(!isOpenCuisine);
   }
 
-  const handleChangeCuisine= (e, cui) => {
+  const handleChangeCuisine = (e, cui) => {
     const cuisineCopy = [...cuisine];
-    const foundCuisine= cuisine?.find((c) => c.name === cui);
+    const foundCuisine = cuisine?.find((c) => c.name === cui);
 
-    if (!foundCuisine){
+    if (!foundCuisine) {
       return;
     }
     foundCuisine.isChecked = e.currentTarget.checked;
@@ -174,8 +171,8 @@ const CreateProduct = () => {
 
   const [isOpenEnergie, setIsOpenEnergie] = useState(false)
   const [energie, setEnergie] = useState([
-    {name: "Prise USB", isChecked: false},
-    {name: "Prise 220V", isChecked: false},
+    { name: "Prise USB", isChecked: false },
+    { name: "Prise 220V", isChecked: false },
 
   ])
 
@@ -188,7 +185,7 @@ const CreateProduct = () => {
     const energieCopy = [...energie];
     const foundEnergie = energie?.find((e) => e.name === eng);
 
-    if (!foundEnergie){
+    if (!foundEnergie) {
       return;
     }
     foundEnergie.isChecked = e.currentTarget.checked;
@@ -197,10 +194,10 @@ const CreateProduct = () => {
 
   const [isOpenUtilisation, setIsOpenUtilisation] = useState(false)
   const [utilisation, setUtilisation] = useState([
-    {name: "Journée d'excursion", isChecked: false},
-    {name: "Croisière", isChecked: false},
-    {name: "Sport nautique", isChecked: false},
-    {name: "Pêche", isChecked: false},
+    { name: "Journée d'excursion", isChecked: false },
+    { name: "Croisière", isChecked: false },
+    { name: "Sport nautique", isChecked: false },
+    { name: "Pêche", isChecked: false },
   ])
 
   const handleClickUtilisation = (e) => {
@@ -212,7 +209,7 @@ const CreateProduct = () => {
     const utilisationCopy = [...utilisation];
     const foundUtilisation = utilisation?.find((u) => u.name === uti);
 
-    if (!foundUtilisation){
+    if (!foundUtilisation) {
       return;
     }
     foundUtilisation.isChecked = e.currentTarget.checked;
@@ -221,9 +218,9 @@ const CreateProduct = () => {
 
   const [isOpenOptions, setIsOpenOptions] = useState(false)
   const [options, setOptions] = useState([
-    {name: "Wakeboard", prix: "45", isChecked: false},
-    {name: "Ski nautique", prix: "45", isChecked: false},
-    {name: "Bouée", prix: "30", isChecked: false},
+    { name: "Wakeboard", prix: "45", isChecked: false },
+    { name: "Ski nautique", prix: "45", isChecked: false },
+    { name: "Bouée", prix: "30", isChecked: false },
   ])
 
   const handleClickOptions = (e) => {
@@ -235,13 +232,13 @@ const CreateProduct = () => {
     const optionsCopy = [...options];
     const foundOptions = options?.find((o) => o.name === opt);
 
-    if (!foundOptions){
+    if (!foundOptions) {
       return;
     }
     foundOptions.isChecked = e.currentTarget.checked;
     setOptions(optionsCopy)
   }
-  
+
 
   const handleProductImageUpload = (e) => {
     const file = e.target.files[0];
@@ -359,6 +356,7 @@ const CreateProduct = () => {
         carousel1: productCarousel1,
         carousel2: productCarousel2,
         carousel3: productCarousel3,
+        reservation: []
       })
     );
   };
@@ -374,7 +372,7 @@ const CreateProduct = () => {
           onChange={handleProductImageUpload}
           required
         />
-        <small>Images carousel</small>
+        <small>Images carousel (3 obligatoires pour le moment)</small>
         <input
           id="imgUpload"
           accept="image/*"
@@ -527,7 +525,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenNavigation ? "open" : ""}`} >
             {navigation.map((nav) => (
               <label key={nav.name}>
-                <input type="checkbox" onClick={(e) => handleChangeNavigation(e, nav.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeNavigation(e, nav.name)} />
                 <span>{nav.name}</span>
               </label>
             ))}
@@ -536,8 +534,8 @@ const CreateProduct = () => {
             {navigation.some((n) => n.isChecked) ? (
               navigation
                 .filter((n) => n.isChecked)
-                .map((n,i) => (
-                  <span>{i !==0 && ", "}{n.name}</span>
+                .map((n, i) => (
+                  <span>{i !== 0 && ", "}{n.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -551,7 +549,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenSanitaire ? "open" : ""}`} >
             {sanitaire.map((san) => (
               <label key={san.name}>
-                <input type="checkbox" onClick={(e) => handleChangeSanitaire(e, san.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeSanitaire(e, san.name)} />
                 <span>{san.name}</span>
               </label>
             ))}
@@ -560,8 +558,8 @@ const CreateProduct = () => {
             {sanitaire.some((s) => s.isChecked) ? (
               sanitaire
                 .filter((s) => s.isChecked)
-                .map((s,i) => (
-                  <span>{i !==0 && ", "}{s.name}</span>
+                .map((s, i) => (
+                  <span>{i !== 0 && ", "}{s.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -575,7 +573,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenConfort ? "open" : ""}`} >
             {confort.map((con) => (
               <label key={con.name}>
-                <input type="checkbox" onClick={(e) => handleChangeConfort(e, con.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeConfort(e, con.name)} />
                 <span>{con.name}</span>
               </label>
             ))}
@@ -584,8 +582,8 @@ const CreateProduct = () => {
             {confort.some((c) => c.isChecked) ? (
               confort
                 .filter((c) => c.isChecked)
-                .map((c,i) => (
-                  <span>{i !==0 && ", "}{c.name}</span>
+                .map((c, i) => (
+                  <span>{i !== 0 && ", "}{c.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -599,7 +597,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenLoisir ? "open" : ""}`} >
             {loisir.map((loi) => (
               <label key={loi.name}>
-                <input type="checkbox" onClick={(e) => handleChangeLoisir(e, loi.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeLoisir(e, loi.name)} />
                 <span>{loi.name}</span>
               </label>
             ))}
@@ -608,8 +606,8 @@ const CreateProduct = () => {
             {loisir.some((l) => l.isChecked) ? (
               loisir
                 .filter((l) => l.isChecked)
-                .map((l,i) => (
-                  <span>{i !==0 && ", "}{l.name}</span>
+                .map((l, i) => (
+                  <span>{i !== 0 && ", "}{l.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -623,7 +621,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenCuisine ? "open" : ""}`} >
             {cuisine.map((cui) => (
               <label key={cui.name}>
-                <input type="checkbox" onClick={(e) => handleChangeCuisine(e, cui.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeCuisine(e, cui.name)} />
                 <span>{cui.name}</span>
               </label>
             ))}
@@ -632,8 +630,8 @@ const CreateProduct = () => {
             {cuisine.some((c) => c.isChecked) ? (
               cuisine
                 .filter((c) => c.isChecked)
-                .map((c,i) => (
-                  <span>{i !==0 && ", "}{c.name}</span>
+                .map((c, i) => (
+                  <span>{i !== 0 && ", "}{c.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -647,7 +645,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenEnergie ? "open" : ""}`} >
             {energie.map((eng) => (
               <label key={eng.name}>
-                <input type="checkbox" onClick={(e) => handleChangeEnergie(e, eng.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeEnergie(e, eng.name)} />
                 <span>{eng.name}</span>
               </label>
             ))}
@@ -656,8 +654,8 @@ const CreateProduct = () => {
             {energie.some((e) => e.isChecked) ? (
               energie
                 .filter((e) => e.isChecked)
-                .map((e,i) => (
-                  <span>{i !==0 && ", "}{e.name}</span>
+                .map((e, i) => (
+                  <span>{i !== 0 && ", "}{e.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -671,7 +669,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenUtilisation ? "open" : ""}`} >
             {utilisation.map((uti) => (
               <label key={uti.name}>
-                <input type="checkbox" onClick={(e) => handleChangeUtilisation(e, uti.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeUtilisation(e, uti.name)} />
                 <span>{uti.name}</span>
               </label>
             ))}
@@ -680,8 +678,8 @@ const CreateProduct = () => {
             {utilisation.some((u) => u.isChecked) ? (
               utilisation
                 .filter((u) => u.isChecked)
-                .map((u,i) => (
-                  <span>{i !==0 && ", "}{u.name}</span>
+                .map((u, i) => (
+                  <span>{i !== 0 && ", "}{u.name}</span>
                 ))
             ) : (
               <span className="placeholder">
@@ -695,7 +693,7 @@ const CreateProduct = () => {
           <div className={`menu ${isOpenOptions ? "open" : ""}`} >
             {options.map((opt) => (
               <label key={opt.name}>
-                <input type="checkbox" onClick={(e) => handleChangeOptions(e, opt.name)}/>
+                <input type="checkbox" onClick={(e) => handleChangeOptions(e, opt.name)} />
                 <span>{opt.name}</span> - <span>{opt.prix} €</span>
               </label>
             ))}
@@ -704,8 +702,8 @@ const CreateProduct = () => {
             {options.some((o) => o.isChecked) ? (
               options
                 .filter((o) => o.isChecked)
-                .map((o,i) => (
-                  <span>{i !==0 && ", "}{o.name}</span>
+                .map((o, i) => (
+                  <span>{i !== 0 && ", "}{o.name}</span>
                 ))
             ) : (
               <span className="placeholder">
