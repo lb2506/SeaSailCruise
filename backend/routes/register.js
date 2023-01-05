@@ -10,7 +10,9 @@ router.post("/", async (req, res) => {
     firstName: Joi.string().min(3).max(30).required(),
     lastName: Joi.string().min(3).max(30).required(),
     email: Joi.string().min(3).max(200).required().email().messages({
-      "string.email": "Merci de saisir une adresse email valide"}),
+      "string.email": "Merci de saisir une adresse email valide"
+    }),
+    phone: Joi.string().min(3).max(30).required(),
     password: Joi.string().min(6).max(200).required().messages({
       "string.min": "Le mot de passe doit contenir au moins 6 caractères",
     }),
@@ -23,9 +25,9 @@ router.post("/", async (req, res) => {
   let user = await User.findOne({ email: req.body.email });
   if (user) return res.status(400).send("Utilisateur déjà existant, veuillez vous connecter.");
 
-  const { firstName, lastName, email, password } = req.body;
+  const { firstName, lastName, email, phone, password } = req.body;
 
-  user = new User({ firstName, lastName, email, password });
+  user = new User({ firstName, lastName, email, phone, password });
 
   const salt = await bcrypt.genSalt(10);
   user.password = await bcrypt.hash(user.password, salt);

@@ -1,4 +1,5 @@
 const { Order } = require("../models/Order");
+const { Product } = require("../models/Product");
 const { auth, isUser, isAdmin } = require("../middleware/auth");
 const moment = require("moment");
 
@@ -11,7 +12,20 @@ router.post("/", auth, async (req, res) => {
 
   try {
     const savedOrder = await newOrder.save();
+    const productId = req.body.products[0].id;
+    const productReservation = await Product
+      .findById
+      (productId);
+
+    if (productReservation) {
+      productReservation.reservation = [...productReservation.reservation, { userId: req.body.userId, userFirstName: req.body.userFirstName, userLastName: req.body.userLastName, startLocation: req.body.products[0].startLocation, endLocation: req.body.products[0].endLocation, dureeLocation: req.body.products[0].dureeLocation, choiceGuide: req.body.products[0].choiceGuide }]
+      await productReservation.save();
+      console.log("Réservation ajoutée au(x) produit(s)");
+    } else {
+      console.log("Product not found");
+    }
     res.status(200).send(savedOrder);
+    console.log("Commande enregistrée");
   } catch (err) {
     res.status(500).send(err);
   }

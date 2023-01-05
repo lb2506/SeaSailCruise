@@ -57,7 +57,7 @@ const createOrder = async (data) => {
     subtotal: data.amount / 100,
     total: data.amount / 100,
     payment_status: data.status,
-    type: 'En ligne'
+    type: 'Site internet'
   });
 
   try {
