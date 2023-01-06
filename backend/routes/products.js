@@ -20,48 +20,48 @@ router.post("/", isAdmin, async (req, res) => {
         return response;
       });
 
-      Promise.all(uploadedCarousel).then((values) => {
-        console.log(values);
+      Promise.all(uploadedCarousel).then(async (values) => {
+        if (uploadedResponse && uploadedCarousel) {
+          const product = new Product({
+            name,
+            year,
+            localisation,
+            tailleMax,
+            emplacement,
+            horaireStart,
+            horaireEnd,
+            longueur,
+            largeur,
+            tirant_eau,
+            type_moteur,
+            nbr_moteur,
+            carburant,
+            caution,
+            annulation,
+            armement,
+            guide,
+            power,
+            navigation,
+            sanitaire,
+            confort,
+            loisir,
+            cuisine,
+            energie,
+            utilisation,
+            options,
+            desc,
+            price,
+            image: uploadedResponse,
+            carousel: values,
+            reservation,
+          });
+
+          const savedProduct = await product.save();
+          res.status(200).send(savedProduct);
+        }
       });
 
-      if (uploadedResponse && uploadedCarousel) {
-        const product = new Product({
-          name,
-          year,
-          localisation,
-          tailleMax,
-          emplacement,
-          horaireStart,
-          horaireEnd,
-          longueur,
-          largeur,
-          tirant_eau,
-          type_moteur,
-          nbr_moteur,
-          carburant,
-          caution,
-          annulation,
-          armement,
-          guide,
-          power,
-          navigation,
-          sanitaire,
-          confort,
-          loisir,
-          cuisine,
-          energie,
-          utilisation,
-          options,
-          desc,
-          price,
-          image: uploadedResponse,
-          carousel: uploadedCarousel,
-          reservation,
-        });
 
-        const savedProduct = await product.save();
-        res.status(200).send(savedProduct);
-      }
     }
   } catch (error) {
     console.log(error);
