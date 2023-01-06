@@ -10,9 +10,7 @@ const CreateProduct = () => {
   const { createStatus } = useSelector((state) => state.products);
 
   const [productImg, setProductImg] = useState("");
-  const [productCarousel1, setProductCarousel1] = useState("");
-  const [productCarousel2, setProductCarousel2] = useState("");
-  const [productCarousel3, setProductCarousel3] = useState("");
+  const [productCarousel, setProductCarousel] = useState("");
   const [name, setName] = useState("");
   const [year, setYear] = useState("");
   const [localisation, setLocalisation] = useState("");
@@ -259,10 +257,13 @@ const CreateProduct = () => {
     }
   };
 
-  const handleProductCarousel1 = (e) => {
-    const file = e.target.files[0];
+  const handleProductCarousel = (e) => {
+    const files = e.target.files;
+    const filesArray = Array.from(files);
 
-    TransformFileData1(file);
+    filesArray.forEach((file) => {
+      TransformFileData1(file);
+    });
   };
 
   const TransformFileData1 = (file) => {
@@ -271,50 +272,10 @@ const CreateProduct = () => {
     if (file) {
       reader.readAsDataURL(file);
       reader.onloadend = () => {
-        setProductCarousel1(reader.result);
+        setProductCarousel((prev) => [...prev, reader.result]);
       };
     } else {
-      setProductCarousel1("");
-    }
-  };
-
-
-  const handleProductCarousel2 = (e) => {
-    const file = e.target.files[0];
-
-    TransformFileData2(file);
-  };
-
-  const TransformFileData2 = (file) => {
-    const reader = new FileReader();
-
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setProductCarousel2(reader.result);
-      };
-    } else {
-      setProductCarousel2("");
-    }
-  };
-
-
-  const handleProductCarousel3 = (e) => {
-    const file = e.target.files[0];
-
-    TransformFileData3(file);
-  };
-
-  const TransformFileData3 = (file) => {
-    const reader = new FileReader();
-
-    if (file) {
-      reader.readAsDataURL(file);
-      reader.onloadend = () => {
-        setProductCarousel3(reader.result);
-      };
-    } else {
-      setProductCarousel3("");
+      setProductCarousel("");
     }
   };
 
@@ -353,9 +314,7 @@ const CreateProduct = () => {
         desc,
         price,
         image: productImg,
-        carousel1: productCarousel1,
-        carousel2: productCarousel2,
-        carousel3: productCarousel3,
+        carousel: productCarousel,
         reservation: []
       })
     );
@@ -372,24 +331,13 @@ const CreateProduct = () => {
           onChange={handleProductImageUpload}
           required
         />
-        <small>Images carousel (3 obligatoires pour le moment)</small>
+        <small>Images carousel</small>
         <input
           id="imgUpload"
           accept="image/*"
           type="file"
-          onChange={handleProductCarousel1}
-        />
-        <input
-          id="imgUpload"
-          accept="image/*"
-          type="file"
-          onChange={handleProductCarousel2}
-        />
-        <input
-          id="imgUpload"
-          accept="image/*"
-          type="file"
-          onChange={handleProductCarousel3}
+          multiple
+          onChange={handleProductCarousel}
         />
         <small>Modèle</small>
         <input

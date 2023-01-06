@@ -7,24 +7,24 @@ const router = require("express").Router();
 //CREATE
 
 router.post("/", isAdmin, async (req, res) => {
-  const { name, year, localisation, emplacement, longueur, largeur, tirant_eau, armement, guide, type_moteur, nbr_moteur, carburant, caution, annulation, horaireStart, horaireEnd, tailleMax, power, desc, navigation, sanitaire, confort, loisir, cuisine, energie, utilisation, options, price, image, carousel1, carousel2, carousel3, reservation } = req.body;
-
+  const { name, year, localisation, emplacement, longueur, largeur, tirant_eau, armement, guide, type_moteur, nbr_moteur, carburant, caution, annulation, horaireStart, horaireEnd, tailleMax, power, desc, navigation, sanitaire, confort, loisir, cuisine, energie, utilisation, options, price, image, carousel, reservation } = req.body;
   try {
-    if (image) {
+    if (image && carousel) {
       const uploadedResponse = await cloudinary.uploader.upload(image, {
         upload_preset: "seasailcruise",
       });
-      const uploadedCarousel1 = await cloudinary.uploader.upload(carousel1, {
-        upload_preset: "seasailcruise",
-      });
-      const uploadedCarousel2 = await cloudinary.uploader.upload(carousel2, {
-        upload_preset: "seasailcruise",
-      });
-      const uploadedCarousel3 = await cloudinary.uploader.upload(carousel3, {
-        upload_preset: "seasailcruise",
+      const uploadedCarousel = carousel.map(async (image) => {
+        const response = await cloudinary.uploader.upload(image, {
+          upload_preset: "seasailcruise",
+        });
+        return response;
       });
 
-      if (uploadedResponse && uploadedCarousel1 || uploadedCarousel2 || uploadedCarousel3) {
+      Promise.all(uploadedCarousel).then((values) => {
+        console.log(values);
+      });
+
+      if (uploadedResponse && uploadedCarousel) {
         const product = new Product({
           name,
           year,
@@ -55,9 +55,7 @@ router.post("/", isAdmin, async (req, res) => {
           desc,
           price,
           image: uploadedResponse,
-          carousel1: uploadedCarousel1,
-          carousel2: uploadedCarousel2,
-          carousel3: uploadedCarousel3,
+          carousel: uploadedCarousel,
           reservation,
         });
 
@@ -81,16 +79,9 @@ router.delete("/:id", isAdmin, async (req, res) => {
 
     if (product.image.public_id) {
       const destroyResponse = await cloudinary.uploader.destroy(product.image.public_id)
-      if (product.carousel1.public_id) {
+      if (product.carousel.public_id) {
         await cloudinary.uploader.destroy(product.carousel1.public_id)
       }
-      if (product.carousel2.public_id) {
-        await cloudinary.uploader.destroy(product.carousel2.public_id)
-      }
-      if (product.carousel3.public_id) {
-        await cloudinary.uploader.destroy(product.carousel3.public_id)
-      }
-
       if (destroyResponse) {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
 
@@ -113,23 +104,6 @@ router.get("/", async (req, res) => {
   } catch (error) {
     res.status(500).send
   }
-
-  // const qbrand = req.query.brand;
-  // try {
-  //   let products;
-
-  //   if (qbrand) {
-  //     products = await Product.find({
-  //       brand: qbrand,
-  //     });
-  //   } else {
-  //     products = await Product.find();
-  //   }
-
-  //   res.status(200).send(products);
-  // } catch (error) {
-  //   res.status(500).send(error);
-  // }
 });
 
 //GET PRODUCT

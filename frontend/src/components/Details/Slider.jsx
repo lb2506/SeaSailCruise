@@ -11,7 +11,9 @@ import "swiper/modules/navigation/navigation.min.css";
 import { Navigation, Pagination } from "swiper";
 
 export default function Slider({ product }) {
-    if (product.carousel1 && product.carousel2 && product.carousel3) {
+
+    console.log(product);
+    if (product.carousel) {
         return (
             <>
                 <Swiper
@@ -25,9 +27,11 @@ export default function Slider({ product }) {
                     modules={[Navigation, Pagination]}
                     className="mySwiper"
                 >
-                    <SwiperSlide><img src={product.carousel1.url} alt='boat' /></SwiperSlide>
-                    <SwiperSlide><img src={product.carousel2.url} alt='boat' /></SwiperSlide>
-                    <SwiperSlide><img src={product.carousel3.url} alt='boat' /></SwiperSlide>
+                    {product.carousel.map((image, index) => (
+                        <SwiperSlide key={index}>
+                            <img src={image.url} alt='boat' />
+                        </SwiperSlide>
+                    ))}
                 </Swiper>
             </>
         );

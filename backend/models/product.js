@@ -31,9 +31,7 @@ const productSchema = new mongoose.Schema(
     desc: { type: String, required: true },
     price: { type: Number, required: true },
     image: { type: Object, required: true },
-    carousel1: { type: Object, required: false },
-    carousel2: { type: Object, required: false },
-    carousel3: { type: Object, required: false },
+    carousel: { type: Object, required: false },
     reservation: { type: Object, required: true },
   },
   { timestamps: true }
