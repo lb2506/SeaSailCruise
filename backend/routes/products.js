@@ -60,8 +60,6 @@ router.post("/", isAdmin, async (req, res) => {
           res.status(200).send(savedProduct);
         }
       });
-
-
     }
   } catch (error) {
     console.log(error);
@@ -77,12 +75,16 @@ router.delete("/:id", isAdmin, async (req, res) => {
 
     if (!product) return res.status(404).send("Produit non trouvé...");
 
+    console.log(product);
     if (product.image.public_id) {
       const destroyResponse = await cloudinary.uploader.destroy(product.image.public_id)
-      if (product.carousel.public_id) {
-        await cloudinary.uploader.destroy(product.carousel1.public_id)
-      }
-      if (destroyResponse) {
+
+      const destroyCarousel = product.carousel.map(async (image) => {
+        const response = await cloudinary.uploader.destroy(image.public_id);
+        return response;
+      });
+
+      if (destroyResponse && destroyCarousel) {
         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
 
         res.status(200).send(deletedProduct);
