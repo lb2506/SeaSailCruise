@@ -7,7 +7,7 @@ const router = require("express").Router();
 
 //CREATE
 
-router.post("/", auth, async (req, res) => {
+router.post("/", isAdmin, async (req, res) => {
   const newOrder = new Order(req.body);
 
   try {

@@ -33,6 +33,8 @@ import Calendrier from "./components/admin/Calendrier";
 import Contrat from "./components/admin/Contrat";
 import OrdersList from "./components/admin/list/OrdersList";
 import CreateBooking from "./components/admin/CreateBooking";
+import CreateContract from "./components/admin/CreateContract";
+import ContractsList from "./components/admin/list/ContractsList";
 
 
 function App() {
@@ -69,7 +71,10 @@ function App() {
                 <Route path="create-booking" element={<CreateBooking />} />
               </Route>
               <Route path="calendar" element={<Calendrier />} />
-              <Route path="contract" element={<Contrat />} />
+              <Route path="contract" element={<Contrat />} >
+                <Route index element={<ContractsList />} />
+                <Route path="create-contract" element={<CreateContract />} />
+              </Route>
             </Route>
             <Route path="/account" element={<UserAccount />}>
               <Route path="orders/:userId" element={<UserOrders />} />

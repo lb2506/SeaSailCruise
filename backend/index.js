@@ -6,7 +6,8 @@ const login = require("./routes/login");
 const orders = require("./routes/orders");
 const stripe = require("./routes/stripe");
 const productsRoute = require("./routes/products");
-const users = require("./routes/users")
+const users = require("./routes/users");
+const contracts = require("./routes/contracts");
 const bodyParser = require('body-parser');
 
 
@@ -26,6 +27,7 @@ app.use("/api/orders", orders);
 app.use("/api/stripe", stripe);
 app.use("/api/products", productsRoute);
 app.use("/api/users", users);
+app.use("/api/contracts", contracts);
 
 app.get("/", (req, res) => {
   res.send("Bienvenue sur l'API de réservation en ligne...");

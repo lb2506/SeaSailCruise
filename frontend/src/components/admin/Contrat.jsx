@@ -1,10 +1,25 @@
 import React from 'react';
+import { Outlet, useNavigate } from "react-router-dom";
+import { AdminHeaders, PrimaryButton } from "./CommonStyled";
 
-let Contrat = () => {
+const Contrat = () => {
+
+    const navigate = useNavigate();
+
+
+
     return (
-        <div>
-            <h1>Contrat</h1>
-        </div>
+        <>
+            <AdminHeaders>
+                <h2>Contrats</h2>
+                <PrimaryButton
+                    onClick={() => navigate("/admin/contract/create-contract")}
+                >
+                    Nouveau contrat
+                </PrimaryButton>
+            </AdminHeaders>
+            <Outlet />
+        </>
     );
 }
 

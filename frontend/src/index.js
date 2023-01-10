@@ -11,8 +11,7 @@ import authReducer from "./slices/authSlice";
 import { productsApi } from "./slices/productsApi";
 import ordersReducer from "./slices/ordersSlice";
 import usersReducer, { usersFetch } from "./slices/usersSlice";
-
-
+import contractsReducer, { contractsFetch } from "./slices/contractsSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +19,7 @@ const store = configureStore({
     orders: ordersReducer,
     users: usersReducer,
     cart: cartReducer,
+    contracts: contractsReducer,
     auth: authReducer,
     [productsApi.reducerPath]: productsApi.reducer,
   },
@@ -28,6 +28,7 @@ const store = configureStore({
 });
 
 store.dispatch(productsFetch());
+store.dispatch(contractsFetch());
 store.dispatch(usersFetch())
 store.dispatch(getTotals());
 

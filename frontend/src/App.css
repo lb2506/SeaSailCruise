@@ -687,6 +687,59 @@ input.inputBox {
   align-items: center;
 }
 
+/* Admin --- Contrat */
+
+.ql-container {
+  height: 50vh !important;
+}
+
+.contract-titleInput {
+  font-size: 20px;
+  margin-bottom: 20px;
+  padding: 5px 15px;
+}
+
+.list-titles {
+  margin-bottom: 0.5rem;
+  font-weight: normal;
+  cursor: pointer;
+}
+
+.active-title {
+  font-weight: bold;
+}
+
+.contract-container {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+}
+
+.edit-contract {
+  width: 50vw;
+}
+
+.contract-content {
+  border: 1px solid grey;
+  border-radius: 5px;
+  width: 50vw;
+  padding: 2rem;
+}
+
+.contract-header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.contract-header h3 {
+  margin-bottom: 1rem;
+}
+
+.contract-header p {
+  font-style: italic;
+  cursor: pointer;
+}
+
 /* Admin --- Create product */
 
 .dropdown button {
