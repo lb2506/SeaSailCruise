@@ -4,10 +4,12 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import { PrimaryButton } from "./CommonStyled";
 import { contractsCreate } from "../../slices/contractsSlice";
+import { useNavigate } from "react-router-dom";
 
 
 let CreateContract = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
     const { createStatus } = useSelector((state) => state.contracts);
     const [value, setValue] = useState('');
@@ -21,6 +23,13 @@ let CreateContract = () => {
                 content: value
             })
         )
+    }
+
+    {
+        createStatus === "success" &&
+            setTimeout(() => {
+                navigate("/admin/contract")
+            }, 1000)
     }
 
     return (

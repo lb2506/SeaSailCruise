@@ -45,7 +45,6 @@ export const contractsEdit = createAsyncThunk(
             return response.data;
         } catch (error) {
             console.log(error);
-            toast.error(error.response?.data);
         }
     }
 );
@@ -90,7 +89,7 @@ const contractsSlice = createSlice({
             );
             state.list = newList;
             state.editStatus = 'success';
-            toast.success('Contrat modifié');
+            toast.success('Contrat mis à jour', { position: 'bottom-left' });
         },
         [contractsEdit.rejected]: (state, action) => {
             state.editStatus = 'rejected';
