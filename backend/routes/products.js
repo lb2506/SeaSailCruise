@@ -122,7 +122,8 @@ router.get("/find/:id", async (req, res) => {
 //UPDATE
 
 router.put("/:id", isAdmin, async (req, res) => {
-  if (req.body.productImg) {
+
+  if (req.body.newProductImg) {
     try {
       const destroyResponse = await cloudinary.uploader.destroy(
         req.body.product.image.public_id
@@ -130,7 +131,7 @@ router.put("/:id", isAdmin, async (req, res) => {
 
       if (destroyResponse) {
         const uploadedResponse = await cloudinary.uploader.upload(
-          req.body.productImg,
+          req.body.newProductImg,
           {
             upload_preset: "seasailcruise"
           }
@@ -138,7 +139,7 @@ router.put("/:id", isAdmin, async (req, res) => {
 
         if (uploadedResponse) {
           const updatedProduct = await Product.findByIdAndUpdate(
-            req.params.id,
+            req.body.product._id,
             {
               $set: {
                 ...req.body.product,

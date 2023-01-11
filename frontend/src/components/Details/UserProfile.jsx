@@ -8,7 +8,6 @@ import { toast } from "react-toastify";
 
 const UserProfile = () => {
 
-
   const params = useParams();
 
   const [user, setUser] = useState({

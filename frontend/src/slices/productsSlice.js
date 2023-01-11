@@ -44,6 +44,7 @@ export const productsCreate = createAsyncThunk(
 export const productsEdit = createAsyncThunk(
   "products/productsEdit",
   async (values) => {
+
     try {
       const response = await axios.put(
         `${url}/products/${values.product._id}`,
@@ -97,7 +98,7 @@ const productsSlice = createSlice({
     [productsCreate.fulfilled]: (state, action) => {
       state.items.push(action.payload);
       state.createStatus = "success";
-      toast.success("Product Created!");
+      toast.success("Produit ajouté!");
     },
     [productsCreate.rejected]: (state, action) => {
       state.createStatus = "rejected";
@@ -106,12 +107,12 @@ const productsSlice = createSlice({
       state.editStatus = "pending";
     },
     [productsEdit.fulfilled]: (state, action) => {
-      const updatedProduct = state.items.map((product) => 
-      product._id === action.payload._id ? action.payload : product
+      const updatedProduct = state.items.map((product) =>
+        product._id === action.payload._id ? action.payload : product
       )
       state.items = updatedProduct;
       state.editStatus = "success";
-      toast.info("Product Edited!");
+      toast.info("Produit modifié !", { position: "bottom-left" });
     },
     [productsEdit.rejected]: (state, action) => {
       state.editStatus = "rejected";
@@ -125,7 +126,7 @@ const productsSlice = createSlice({
       );
       state.items = newList;
       state.deleteStatus = "success";
-      toast.error("Product Deleted!");
+      toast.error("Produit supprimé !", { position: "bottom-left" });
     },
     [productsDelete.rejected]: (state, action) => {
       state.deleteStatus = "rejected";

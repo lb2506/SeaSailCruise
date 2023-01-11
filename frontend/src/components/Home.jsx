@@ -26,24 +26,26 @@ const Home = () => {
             <div className="products">
               {data &&
                 data?.map((product) => (
-                  <div key={product._id} className="product">
-                    <Link to={`/product/${product._id}`}>
-                      <div className="img-ctn">
-                        <img src={product.image.url} alt={product.name} />
-                        <div className="price-ctn">A partir de<br /><span>{(product.price).toLocaleString()} €</span></div>
-                      </div>
+                  (product.visible === true &&
+                    <div key={product._id} className="product">
+                      <Link to={`/product/${product._id}`}>
+                        <div className="img-ctn">
+                          <img src={product.image.url} alt={product.name} />
+                          <div className="price-ctn">A partir de<br /><span>{(product.price).toLocaleString()} €</span></div>
+                        </div>
 
-                      <div className="infos-ctn">
-                        <div className="details-container">
-                          <h3>{product.name}<span className="dotDivider" style={{ marginLeft: 5, marginRight: 5 }}>●</span><span>{product.year}</span></h3>
-                          <p>{product.localisation}</p>
-                          <div className="details-infos">
-                            <span>{product.guide}</span><span className="dotDivider">●</span><span>{product.longueur} m</span><span className="dotDivider">●</span><span>{product.tailleMax} pers.</span><span className="dotDivider">●</span><span>{product.power} CV</span>
+                        <div className="infos-ctn">
+                          <div className="details-container">
+                            <h3>{product.name}<span className="dotDivider" style={{ marginLeft: 5, marginRight: 5 }}>●</span><span>{product.year}</span></h3>
+                            <p>{product.localisation}</p>
+                            <div className="details-infos">
+                              <span>{product.guide}</span><span className="dotDivider">●</span><span>{product.longueur} m</span><span className="dotDivider">●</span><span>{product.tailleMax} pers.</span><span className="dotDivider">●</span><span>{product.power} CV</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    </Link>
-                  </div>
+                      </Link>
+                    </div>
+                  )
                 ))}
             </div>
           </>

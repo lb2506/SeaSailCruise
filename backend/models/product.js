@@ -33,6 +33,7 @@ const productSchema = new mongoose.Schema(
     image: { type: Object, required: true },
     carousel: { type: Object, required: false },
     reservation: { type: Object, required: true },
+    visible: { type: Boolean, required: false, default: true },
   },
   { timestamps: true }
 );
