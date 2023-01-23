@@ -4,7 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
-import { ordersEdit, ordersFetch } from "../../../slices/ordersSlice";
+import { ordersEditStatusOrder, ordersFetch, ordersEditStatusPayment } from "../../../slices/ordersSlice";
 import moment from "moment";
 
 export default function OrdersList() {
@@ -25,6 +25,7 @@ export default function OrdersList() {
             oStatus: order.order_status,
             date: moment(order.createdAt).fromNow(),
             type: order.type,
+            payment: order.payment_status
         }
     })
 
@@ -49,41 +50,77 @@ export default function OrdersList() {
         { field: 'date', headerName: 'Date', width: 150 },
         { field: 'type', headerName: 'Méthode de réservation', width: 170 },
         {
+            field: 'payment', headerName: 'Statut du paiement', width: 160,
+            renderCell: (params) => {
+                return (
+                    <>
+                        {params.row.payment === "succeeded" ? <Accepted>Payé</Accepted> :
+                            params.row.payment === "A régler sur place" ? <Pending>A régler</Pending> :
+                                "Erreur"
+                        }
+                    </>
+                )
+            }
+        }, {
+            field: 'acceptPayment',
+            headerName: 'Paiement',
+            sortable: false,
+            width: 150,
+            renderCell: (params) => {
+                return (
+                    <>
+                        {params.row.payment === "A régler sur place" ?
+                            <AcceptPayment onClick={() => handleOrderPayment(params.row.id)}>Valider le paiement</AcceptPayment>
+                            :
+                            null
+                        }
+                    </>
+                )
+            }
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
             sortable: false,
+
             width: 220,
             renderCell: (params) => {
                 return (
                     <>
                         <Actions>
                             <AcceptBtn onClick={() => handleOrderDispatch(params.row.id)}>Accepter</AcceptBtn>
-                            <RefuseBtn onClick={() => handleOrderDeliver(params.row.id)}>Refuser</RefuseBtn>
+                            <RefuseBtn onClick={() => handleOrderRefused(params.row.id)}>Refuser</RefuseBtn>
                             <View onClick={() => navigate(`/order/${params.row.id}`)}>Voir</View>
                         </Actions>
                     </>
                 )
             }
-        },
+        }
     ];
 
     const handleOrderDispatch = (id) => {
-        dispatch(ordersEdit({
+        dispatch(ordersEditStatusOrder({
             id,
             order_status: "accepted",
         }))
     }
 
-    const handleOrderDeliver = (id) => {
-        dispatch(ordersEdit({
+    const handleOrderRefused = (id) => {
+        dispatch(ordersEditStatusOrder({
             id,
             order_status: "refused",
         }))
     }
 
+    const handleOrderPayment = (id) => {
+        dispatch(ordersEditStatusPayment({
+            id,
+            payment_status: "succeeded",
+        }))
+    }
+
     return (
         <div style={{ height: 800, width: '100%' }}>
-
             <DataGrid
                 rows={rows}
                 columns={columns}
@@ -107,6 +144,16 @@ const RefuseBtn = styled.button`
 const View = styled.button`
     background-color: rgb(114, 225, 40);
 `;
+
+const AcceptPayment = styled.button`
+    border: none;
+    outline; none;
+    padding: 3px 5px;
+    color: white;
+    border-radius: 3px;
+    cursor: pointer;
+    background: rgb(75, 112, 226);
+`
 
 const Pending = styled.div`
     color: rgb(253, 181, 40);

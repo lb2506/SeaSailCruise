@@ -39,7 +39,7 @@ const Order = () => {
                             Statut du paiement:
                             {order.payment_status === "pending" ? (
                                 <Pending>En attente</Pending>
-                            ) : order.payment_status === "failed" || "A régler sur place" ? (
+                            ) : order.payment_status === "A régler sur place" ? (
                                 <Dispatched>Non payé</Dispatched>
                             ) : order.payment_status === "paid" || "succeeded" ? (
                                 <Delivered>Payé</Delivered>

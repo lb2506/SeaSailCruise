@@ -84,7 +84,7 @@ export default function ProductsList() {
 
   return (
     <>
-      <div className="products-overlay" style={{ display: isOnDelete ? 'block' : 'none' }}>
+      <div className="popUp-overlay" style={{ display: isOnDelete ? 'block' : 'none' }}>
         <div className="delete-popup">
           <h2>Supprimer le produit ?</h2>
           <p>Cette action est irréversible</p>
@@ -96,7 +96,6 @@ export default function ProductsList() {
               window.location.reload();
             }}>Supprimer</button>
           </div>
-
         </div>
       </div>
       <div style={{ height: 600, width: '100%' }}>

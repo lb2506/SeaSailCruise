@@ -343,9 +343,9 @@
   font-weight: 700;
 }
 
-/* products List */
+/* products List & users List */
 
-.products-overlay {
+.popUp-overlay {
   position: fixed;
   top: 0;
   left: 0;
@@ -356,13 +356,13 @@
   display: none;
 }
 
-.delete-popup {
+
+.delete-popup,
+.contact-popup {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 400px;
-  height: 200px;
   background-color: white;
   border-radius: 5px;
   padding: 2rem;
@@ -370,6 +370,16 @@
   flex-direction: column;
   justify-content: space-between;
   text-align: center;
+}
+
+.delete-popup {
+  width: 400px;
+  height: 200px;
+}
+
+.contact-popup {
+  width: 400px;
+  height: 400px;
 }
 
 .action-buttons {
@@ -393,6 +403,32 @@
 
 .delete-boat {
   background-color: rgb(255, 77, 73);
+}
+
+.contact-email input {
+  width: 80%;
+  height: 30px;
+  margin: 5px 0;
+  padding: 0 5px;
+}
+
+.contact-email textarea {
+  resize: none;
+  width: 80%;
+  margin-top: 5px;
+  height: 80px;
+  padding: 5px;
+}
+
+.cancel-email {
+  padding: 3px 5px;
+  border: none;
+  outline: none;
+  color: white;
+  border-radius: 3px;
+  cursor: pointer;
+  background-color: #4b70e2;
+  width: 50px;
 }
 
 /* products details */
@@ -790,6 +826,7 @@ input.inputBox {
 .contract-header p {
   font-style: italic;
   cursor: pointer;
+
 }
 
 /* Admin --- Create product */

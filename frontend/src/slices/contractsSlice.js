@@ -8,6 +8,7 @@ const initialState = {
     status: null,
     createStatus: null,
     editStatus: null,
+    deleteStatus: null,
 };
 
 export const contractsCreate = createAsyncThunk('contracts/contractsCreate', async (value) => {
@@ -49,6 +50,23 @@ export const contractsEdit = createAsyncThunk(
     }
 );
 
+export const contractsDelete = createAsyncThunk(
+    "contracts/contractsDelete",
+    async (value) => {
+
+        try {
+            const response = await axios.delete(
+                `${url}/contracts/${value.id}`,
+                setHeaders()
+            );
+
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+);
+
 const contractsSlice = createSlice({
     name: 'contracts',
     initialState,
@@ -70,7 +88,7 @@ const contractsSlice = createSlice({
         [contractsCreate.fulfilled]: (state, action) => {
             state.list.push(action.payload);
             state.createStatus = 'success';
-            toast.success('Nouveau contrat enregistré');
+            toast.success('Nouveau contrat enregistré', { position: 'bottom-left' });
         },
         [contractsCreate.rejected]: (state, action) => {
             state.createStatus = 'rejected';
@@ -93,6 +111,17 @@ const contractsSlice = createSlice({
         },
         [contractsEdit.rejected]: (state, action) => {
             state.editStatus = 'rejected';
+        },
+        [contractsDelete.pending]: (state, action) => {
+            state.deleteStatus = 'pending';
+        },
+        [contractsDelete.fulfilled]: (state, action) => {
+            const newList = state.list.filter((contract) => contract._id !== action.payload._id);
+            state.list = newList;
+            state.deleteStatus = 'success';
+        },
+        [contractsDelete.rejected]: (state, action) => {
+            state.deleteStatus = 'rejected';
         }
     },
 });

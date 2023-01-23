@@ -21,7 +21,6 @@ export const ordersFetch = createAsyncThunk("orders/ordersFetch", async () => {
 );
 
 
-// ---- AJOUT MANUEL // 
 
 export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (value) => {
     try {
@@ -33,10 +32,11 @@ export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (value
 }
 )
 
-// ---- //
 
-export const ordersEdit = createAsyncThunk("orders/ordersEdit", async (values, { getState }) => {
+export const ordersEditStatusOrder = createAsyncThunk("orders/ordersEditStatusOrder", async (values, { getState }) => {
     const state = getState();
+
+
 
     let currentOrder = state.orders.list.filter(
         (order) => order._id === values.id
@@ -59,6 +59,32 @@ export const ordersEdit = createAsyncThunk("orders/ordersEdit", async (values, {
         console.log(err)
     }
 });
+
+export const ordersEditStatusPayment = createAsyncThunk("orders/ordersEditStatusPayment", async (values, { getState }) => {
+    const state = getState();
+
+    let currentOrder = state.orders.list.filter(
+        (order) => order._id === values.id
+    );
+
+    const newOrder = {
+        ...currentOrder[0],
+        payment_status: values.payment_status,
+    };
+
+    try {
+        const response = await axios.put(
+            `${url}/orders/${values.id}`,
+            newOrder,
+            setHeaders()
+        );
+
+        return response.data;
+    } catch (err) {
+        console.log(err)
+    }
+});
+
 
 const ordersSlice = createSlice({
     name: "orders",
@@ -86,19 +112,32 @@ const ordersSlice = createSlice({
         [ordersCreate.rejected]: (state, action) => {
             state.createStatus = "rejected";
         },
-        [ordersEdit.pending]: (state, action) => {
+        [ordersEditStatusOrder.pending]: (state, action) => {
             state.status = "pending";
         },
-        [ordersEdit.fulfilled]: (state, action) => {
+        [ordersEditStatusOrder.fulfilled]: (state, action) => {
             const updatedOrders = state.list.map((order) =>
                 order._id === action.payload._id ? action.payload : order
             );
             state.list = updatedOrders;
             state.status = "success";
         },
-        [ordersEdit.rejected]: (state, action) => {
+        [ordersEditStatusOrder.rejected]: (state, action) => {
             state.status = "rejected";
         },
+        [ordersEditStatusPayment.pending]: (state, action) => {
+            state.status = "pending";
+        },
+        [ordersEditStatusPayment.fulfilled]: (state, action) => {
+            const updatedOrders = state.list.map((order) =>
+                order._id === action.payload._id ? action.payload : order
+            );
+            state.list = updatedOrders;
+            state.status = "success";
+        },
+        [ordersEditStatusPayment.rejected]: (state, action) => {
+            state.status = "rejected";
+        }
     }
 })
 

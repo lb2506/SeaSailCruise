@@ -68,7 +68,7 @@ const DateRangeComp = ({ handleChange, disabledDates }) => {
         {open &&
           <DateRange
             locale={locales['fr']}
-            onChange={item => (handleChange(item, [item.selection]), setRange([item.selection]))}
+            onChange={item => { handleChange(item, [item.selection]); setRange([item.selection]) }}
             editableDateInputs={true}
             moveRangeOnFirstSelection={false}
             ranges={range}

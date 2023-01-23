@@ -33,6 +33,7 @@ router.post("/", isAdmin, async (req, res) => {
 
 //UPDATE
 router.put("/:id", isAdmin, async (req, res) => {
+
   try {
     const updatedOrder = await Order.findByIdAndUpdate(
       req.params.id,
@@ -68,7 +69,7 @@ router.get("/find/:userId", isUser, async (req, res) => {
 });
 
 
-// //GET AN ORDER
+// GET AN ORDER
 
 router.get("/findOne/:id", auth, async (req, res) => {
   try {
@@ -84,7 +85,7 @@ router.get("/findOne/:id", auth, async (req, res) => {
   }
 });
 
-//GET LAST 4 ORDERS
+// GET LAST 4 ORDERS
 
 router.get("/", isAdmin, async (req, res) => {
 

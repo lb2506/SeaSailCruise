@@ -11,13 +11,11 @@ import "swiper/modules/navigation/navigation.min.css";
 import { Navigation, Pagination } from "swiper";
 
 export default function Slider({ product }) {
-
-    console.log(product);
     if (product.carousel) {
         return (
             <>
                 <Swiper
-                    slidesPerView={3}
+                    slidesPerView={4.5}
                     spaceBetween={10}
                     loop={true}
                     pagination={{

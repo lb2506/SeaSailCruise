@@ -25,12 +25,10 @@ let CreateContract = () => {
         )
     }
 
-    {
-        createStatus === "success" &&
-            setTimeout(() => {
-                navigate("/admin/contract")
-            }, 1000)
-    }
+    createStatus === "success" &&
+        setTimeout(() => {
+            navigate("/admin/contract")
+        }, 1000)
 
     return (
         <div>

@@ -44,7 +44,7 @@ let CreateBooking = () => {
 
     useEffect(() => {
         setDureeLoc(Math.round(difference_ms / ONE_DAY) + 1)
-    }, [range])
+    }, [range, ONE_DAY, difference_ms])
 
 
     const handleChange = (item) => {
@@ -167,7 +167,7 @@ let CreateBooking = () => {
                     required
                 />
                 <small>Choix du bateau</small>
-                <select className='select' onChange={(e) => (setDateBooked([]), setDisabledDates([]), setBoatSelection(e.target.value))} defaultValue={""} required>
+                <select className='select' onChange={(e) => { setDateBooked([]); setDisabledDates([]); setBoatSelection(e.target.value) }} defaultValue={""} required>
                     <option value="" disabled >Sélectionner</option>
                     {items.map((item) => (
                         <option key={item._id} value={item._id}>{item.name}</option>

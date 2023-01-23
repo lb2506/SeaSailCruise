@@ -51,7 +51,7 @@ const Product = () => {
         setLocStart(new Date(date1_ms).toLocaleDateString("fr"))
         setLocEnd(new Date(date2_ms).toLocaleDateString("fr"))
         setDureeLoc(Math.round(difference_ms / ONE_DAY) + 1)
-    }, [range])
+    }, [range, ONE_DAY, date1_ms, date2_ms, difference_ms])
 
     useEffect(() => {
         setLoading(true)
@@ -66,7 +66,7 @@ const Product = () => {
             setLoading(false)
         }
         fetchData()
-    }, []);
+    }, [params.id])
 
     useEffect(() => {
         dateBooked && dateBooked.map((date) => {
@@ -88,12 +88,12 @@ const Product = () => {
 
             for (let i = 0; i <= difference_days; i++) {
                 disabledDates.push(new Date(dateStartConvert_ms + (i * ONE_DAY)))
+                setDisabledDates([...disabledDates])
             }
-
-            setDisabledDates([...disabledDates])
+            return disabledDates;
         })
 
-    }, [dateBooked])
+    }, [dateBooked, ONE_DAY, disabledDates])
 
 
     const handleAddToCart = ({ product, dureeLoc, locStart, locEnd, choiceGuide }) => {

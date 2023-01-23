@@ -51,4 +51,18 @@ router.put("/", isAdmin, async (req, res) => {
     }
 });
 
+// DELETE CONTRACT
+
+router.delete("/:id", isAdmin, async (req, res) => {
+
+
+    try {
+        const deletedContract = await Contract.findByIdAndDelete(req.params.id);
+        res.status(200).send(deletedContract);
+        console.log('Contrat supprimé');
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 module.exports = router;
