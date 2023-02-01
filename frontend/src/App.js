@@ -27,7 +27,6 @@ import UserProfile from "./components/Details/UserProfile";
 import UserAccount from "./components/account/UserAccount";
 import UserOrders from "./components/account/UserOrders";
 import UserProfileData from "./components/account/UserProfileData";
-import UserFeedBack from "./components/account/UserFeedBack";
 import Payment from "./components/Payment";
 import Calendrier from "./components/admin/Calendrier";
 import Contrat from "./components/admin/Contrat";
@@ -35,6 +34,10 @@ import OrdersList from "./components/admin/list/OrdersList";
 import CreateBooking from "./components/admin/CreateBooking";
 import CreateContract from "./components/admin/CreateContract";
 import ContractsList from "./components/admin/list/ContractsList";
+import Owners from "./components/admin/Owners";
+import OwnersList from "./components/admin/list/OwnersList";
+import CreateOwner from "./components/admin/CreateOwner";
+import OwnerSpace from "./components/account/OwnerSpace";
 
 
 function App() {
@@ -66,6 +69,10 @@ function App() {
                 <Route path="create-product" element={<CreateProduct />} />
               </Route>
               <Route path="users" element={<Users />} />
+              <Route path="owners" element={<Owners />}>
+                <Route index element={<OwnersList />} />
+                <Route path="create-owner" element={<CreateOwner />} />
+              </Route>
               <Route path="orders" element={<Orders />} >
                 <Route index element={<OrdersList />} />
                 <Route path="create-booking" element={<CreateBooking />} />
@@ -79,7 +86,7 @@ function App() {
             <Route path="/account" element={<UserAccount />}>
               <Route path="orders/:userId" element={<UserOrders />} />
               <Route path="profile" element={<UserProfileData />} />
-              <Route path="feedbacks" element={<UserFeedBack />} />
+              <Route path="owner-space" element={<OwnerSpace />} />
             </Route>
             <Route path="/checkout" element={<Payment />} />
             <Route path="*" element={<NotFound />} />

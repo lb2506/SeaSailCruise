@@ -11,6 +11,7 @@ const initialState = {
   phone: "",
   _id: "",
   isAdmin: false,
+  isOwner: false,
   registerStatus: "",
   registerError: "",
   loginStatus: "",
@@ -92,6 +93,7 @@ const authSlice = createSlice({
           phone: user.phone,
           _id: user._id,
           isAdmin: user.isAdmin,
+          isOwner: user.isOwner,
           userLoaded: true,
         };
       } else return { ...state, userLoaded: true };
@@ -108,6 +110,7 @@ const authSlice = createSlice({
         phone: "",
         _id: "",
         isAdmin: false,
+        isOwner: false,
         registerStatus: "",
         registerError: "",
         loginStatus: "",
@@ -131,6 +134,7 @@ const authSlice = createSlice({
           phone: user.phone,
           _id: user._id,
           isAdmin: user.isAdmin,
+          isOwner: user.isOwner,
           registerStatus: "success",
         };
       } else return state;
@@ -157,6 +161,7 @@ const authSlice = createSlice({
           phone: user.phone,
           _id: user._id,
           isAdmin: user.isAdmin,
+          isOwner: user.isOwner,
           loginStatus: "success",
         };
       } else return state;
@@ -186,6 +191,7 @@ const authSlice = createSlice({
           phone: user.phone,
           _id: user._id,
           isAdmin: user.isAdmin,
+          isOwner: user.isOwner,
           getUserStatus: "success",
         };
       } else return state;

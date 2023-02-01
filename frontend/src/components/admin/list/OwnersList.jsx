@@ -6,8 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { userDelete, usersFetch } from "../../../slices/usersSlice";
 import EmailContact from "../../Details/EmailContact";
 
-export default function UsersList() {
-  const navigate = useNavigate();
+export default function OwnersList() {
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
 
@@ -18,18 +17,20 @@ export default function UsersList() {
     dispatch(usersFetch());
   }, [dispatch]);
 
-  const rows =
-    users &&
-    users.map((user) => {
+
+  const rows = users && users
+    .filter((user) => (user.isOwner === true))
+    .map((user) => {
       return {
         id: user._id,
-        uName: [user.firstName + ' ' + user.lastName],
+        uName: [user.firstName + " " + user.lastName],
         uEmail: user.email,
         uPhone: user.phone,
         isAdmin: user.isAdmin,
-        isOwner: user.isOwner
       };
     });
+
+
 
   const columns = [
     // { field: "id", headerName: "ID", width: 220 },
@@ -47,22 +48,6 @@ export default function UsersList() {
               <Admin>Admin</Admin>
             ) : (
               <Customer>Utilisateur</Customer>
-            )}
-          </div>
-        );
-      },
-    },
-    {
-      field: "isOwner",
-      headerName: "Propriétaire",
-      width: 100,
-      renderCell: (params) => {
-        return (
-          <div>
-            {params.row.isOwner ? (
-              <Owner>Oui</Owner>
-            ) : (
-              <NotOwner>Non</NotOwner>
             )}
           </div>
         );
@@ -106,7 +91,6 @@ export default function UsersList() {
         </div>
       </div>
       <div style={{ height: 800, width: "100%" }}>
-        <h2 style={{ marginBottom: '20px' }}>Utilisateurs</h2>
         <DataGrid
           rows={rows}
           columns={columns}

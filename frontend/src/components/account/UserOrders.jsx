@@ -37,8 +37,8 @@ const UserOrders = () => {
                     {userOrders && userOrders.length > 0 ? (
                         userOrders.map((userOrders) => (
                             <div key={userOrders._id} style={{ display: 'flex', gap: '1rem' }}>
-                                {JSON.parse(userOrders.products).map((product) => (
-                                    <div key={product._id} style={{ display: 'flex', gap: '1rem' }}>
+                                {JSON.parse(userOrders.products).map((product, index) => (
+                                    <div key={index} style={{ display: 'flex', gap: '1rem' }}>
                                         <p>{product.name}</p>
                                         <p>{product.choiceGuide}</p>
                                         <p>Du : {product.startLocation}</p>

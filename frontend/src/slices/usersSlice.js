@@ -7,6 +7,7 @@ const initialState = {
   users: [],
   status: null,
   deleteStatus: null,
+  createStatus: null,
 };
 
 export const usersFetch = createAsyncThunk("users/usersFetch", async () => {
@@ -22,6 +23,18 @@ export const userDelete = createAsyncThunk("users/userDelete", async (id) => {
   try {
     const response = await axios.delete(`${url}/users/${id}`, setHeaders());
 
+    return response.data;
+  } catch (error) {
+    console.log(error.response.data);
+    toast.error(error.response?.data, {
+      position: "bottom-left",
+    });
+  }
+});
+
+export const ownersCreate = createAsyncThunk("users/ownersCreate", async (data) => {
+  try {
+    const response = await axios.post(`${url}/users`, data, setHeaders());
     return response.data;
   } catch (error) {
     console.log(error.response.data);
@@ -62,6 +75,16 @@ const usersSlice = createSlice({
     [userDelete.rejected]: (state, action) => {
       state.deleteStatus = "rejected";
     },
+    [ownersCreate.pending]: (state, action) => {
+      state.createStatus = "pending";
+    },
+    [ownersCreate.fulfilled]: (state, action) => {
+      state.users.push(action.payload);
+      state.createStatus = "success";
+    },
+    [ownersCreate.rejected]: (state, action) => {
+      state.createStatus = "rejected";
+    }
   },
 });
 

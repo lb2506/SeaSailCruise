@@ -14,7 +14,8 @@ const userSchema = new mongoose.Schema(
     phone: { type: String, required: false, minlength: 3, maxlength: 30 },
     password: { type: String, required: true, minlength: 3, maxlength: 1024 },
     isAdmin: { type: Boolean, default: false },
-    isOwner: { type: Boolean, default: false }
+    isOwner: { type: Boolean, default: false },
+    boats: { type: Array, default: [] }
   },
   { timestamps: true }
 );

@@ -41,6 +41,7 @@ router.get("/find/:id", isUser, async (req, res) => {
       email: user.email,
       phone: user.phone,
       isAdmin: user.isAdmin,
+      isOwner: user.isOwner,
     });
   } catch (error) {
     res.status(500).send(error);
@@ -72,6 +73,7 @@ router.put("/:id", isUser, async (req, res) => {
         email: req.body.email,
         phone: req.body.phone,
         isAdmin: req.body.isAdmin,
+        isOwner: req.body.isOwner,
         password: user.password,
       },
       { new: true }
@@ -84,6 +86,7 @@ router.put("/:id", isUser, async (req, res) => {
       email: updatedUser.email,
       phone: updatedUser.phone,
       isAdmin: updatedUser.isAdmin,
+      isOwner: updatedUser.isOwner,
     });
   } catch (error) {
     res.status(500).send(error);
@@ -121,6 +124,29 @@ router.get("/stats", isAdmin, async (req, res) => {
   } catch (err) {
     console.log(err)
     res.status(500).send(err)
+  }
+});
+
+// CREATE OWNER
+
+router.post("/", async (req, res) => {
+  try {
+
+    const newOwner = await User.create({
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phone: req.body.phoneNumber,
+      password: Math.random().toString(36).slice(-8),
+      isAdmin: false,
+      isOwner: true,
+      boats: req.body.boats
+    });
+    console.log(newOwner);
+    res.status(200).send({ newOwner });
+  } catch (error) {
+    console.log(error);
+    res.status(500).send(error);
   }
 });
 

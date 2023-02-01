@@ -3,24 +3,26 @@ import { Outlet, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 const UserAccount = () => {
-  const auth = useSelector((state) => state.auth);
+    const auth = useSelector((state) => state.auth);
 
-  if (!auth._id) return <p>Accès refusé.</p>;
+    if (!auth._id) return <p>Accès refusé.</p>;
 
-  return (
-<div>
-    <NavbarAccount>
-        <NavLink className={({ isActive }) => isActive ? "link-active" : "link-inactive"} to={`/account/orders/${auth._id}`}>Mes commandes</NavLink>
-        <NavLink className={({ isActive }) => isActive ? "link-active" : "link-inactive"} to="/account/profile">Mon compte</NavLink>
-        <NavLink className={({ isActive }) => isActive ? "link-active" : "link-inactive"} to="/account/feedbacks">Mes avis</NavLink>
-    </NavbarAccount>
+    return (
+        <div>
+            <NavbarAccount>
+                <NavLink className={({ isActive }) => isActive ? "link-active" : "link-inactive"} to={`/account/orders/${auth._id}`}>Mes commandes</NavLink>
+                <NavLink className={({ isActive }) => isActive ? "link-active" : "link-inactive"} to="/account/profile">Mes informations</NavLink>
+                {auth.isOwner === true &&
+                    <NavLink className={({ isActive }) => isActive ? "link-active" : "link-inactive"} to="/account/owner-space">Espace professionnel</NavLink>
+                }
+            </NavbarAccount>
 
-    <Content>
-        <Outlet />
-    </Content>
-</div>
+            <Content>
+                <Outlet />
+            </Content>
+        </div>
 
-  );
+    );
 };
 
 export default UserAccount;
