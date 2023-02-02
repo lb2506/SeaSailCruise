@@ -62,7 +62,24 @@ const createOrder = async (data) => {
 
   try {
     const savedOrder = await newOrder.save();
-    // console.log("Processed Order:", savedOrder);
+
+    const productsParse = JSON.parse(data.metadata.products);
+
+    productsParse.forEach(async (product) => {
+      const productId = product.id;
+      const productReservation = await Product
+        .findById
+        (productId);
+
+      if (productReservation) {
+        productReservation.reservation = [...productReservation.reservation, { _id: savedOrder._id, userId: data.metadata.userId, userFirstName: data.metadata.userFirstName, userLastName: data.metadata.userLastName, startLocation: product.startLocation, endLocation: product.endLocation, dureeLocation: product.dureeLocation, choiceGuide: product.choiceGuide }]
+        await productReservation.save();
+        console.log("Réservation ajoutée au(x) produit(s)");
+      } else {
+        console.log("Product not found");
+      }
+    })
+
     console.log("Commande enregistrée");
   } catch (err) {
     console.log(err);
@@ -70,22 +87,7 @@ const createOrder = async (data) => {
 
   // ajout de la réservation dans le produit en fonction de l'id du produit
 
-  const productsParse = JSON.parse(data.metadata.products);
 
-  productsParse.forEach(async (product) => {
-    const productId = product.id;
-    const productReservation = await Product
-      .findById
-      (productId);
-
-    if (productReservation) {
-      productReservation.reservation = [...productReservation.reservation, { userId: data.metadata.userId, userFirstName: data.metadata.userFirstName, userLastName: data.metadata.userLastName, startLocation: product.startLocation, endLocation: product.endLocation, dureeLocation: product.dureeLocation, choiceGuide: product.choiceGuide }]
-      await productReservation.save();
-      console.log("Réservation ajoutée au(x) produit(s)");
-    } else {
-      console.log("Product not found");
-    }
-  })
 };
 
 

@@ -8,7 +8,7 @@ import { setHeaders, url } from "../../slices/api";
 import { useDispatch, useSelector } from "react-redux";
 import DateRangeComp from "../Details/DatePicker";
 import { addDays } from 'date-fns'
-import { ordersCreate } from '../../slices/ordersSlice';
+import { ordersCreate, ordersDelete } from '../../slices/ordersSlice';
 import styled from "styled-components";
 import { PrimaryButton } from "../admin/CommonStyled";
 
@@ -52,8 +52,9 @@ const OwnerSpace = () => {
 
 
     useEffect(() => {
-        setLoading(true)
+
         if (auth._id) {
+            setLoading(true)
             const user = users.find((user) => user._id === auth._id);
             if (user) {
                 const boats = user.boats.filter((boat) => boat.isChecked === true);
@@ -74,7 +75,9 @@ const OwnerSpace = () => {
     }, [userBoats, items])
 
     useEffect(() => {
+
         if (boatSelected) {
+            setLoading(true)
             const boat = infosBoats.find((boat) => boat._id === boatSelected._id);
             const dates = boat.reservation.map((reservation) => {
                 return {
@@ -84,11 +87,14 @@ const OwnerSpace = () => {
                 }
             })
             setDateBooked(dates);
+            setLoading(false)
         }
     }, [boatSelected, infosBoats])
 
     useEffect(() => {
+
         dateBooked && dateBooked.map((date) => {
+            setLoading(true)
             const dateStart = date.startDate;
             const dateEnd = date.endDate;
 
@@ -103,6 +109,7 @@ const OwnerSpace = () => {
             }
 
             setDisabledDates([...disabledDates])
+            setLoading(false)
         })
 
     }, [dateBooked])
@@ -142,7 +149,7 @@ const OwnerSpace = () => {
         }
     ];
 
-    const handleSubmit = async (e) => {
+    const handleCreate = async (e) => {
         e.preventDefault()
         dispatch(
             ordersCreate({
@@ -156,7 +163,14 @@ const OwnerSpace = () => {
                 type: "Propriétaire",
             })
         )
+        window.location.reload()
     }
+
+    const handleDelete = async (userOrdersId) => {
+        dispatch(ordersDelete(userOrdersId))
+        window.location.reload()
+    }
+
 
     useEffect(() => {
         async function fetchData() {
@@ -172,7 +186,6 @@ const OwnerSpace = () => {
         }
         fetchData()
     }, []);
-
 
     return (
         <>
@@ -192,26 +205,28 @@ const OwnerSpace = () => {
                     </div>
                     <div>
                         <StyledCreateProduct>
-                            <StyledForm onSubmit={handleSubmit}>
+                            <StyledForm onSubmit={handleCreate}>
                                 <h2 style={{ marginBottom: '1rem', marginTop: '1rem' }}>Ajouter dates d'indisponibilités pour un bateau</h2>
-                                <small>Choix du bateau</small>
-                                <select defaultValue={""} required onChange={(e) => { setDateBooked([]); setDisabledDates([]); setBoatSelected(JSON.parse(e.target.value)) }}>
-                                    <option value="" disabled>Sélectionner</option>
-                                    {infosBoats && infosBoats.map((item) => (
-                                        <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
-                                    ))}
-                                </select>
-                                {boatSelected === "" || loading === true ?
-                                    <></>
-                                    :
-                                    <DateRangeComp
-                                        handleChange={handleChange}
-                                        disabledDates={disabledDates}
-                                    />
-                                }
-                                <PrimaryButton type="submit">
-                                    {createStatus === "pending" ? "En cours..." : "Valider"}
-                                </PrimaryButton>
+                                <div style={{ display: 'flex', flexDirection: 'column', width: '200px' }}>
+                                    <small>Choix du bateau</small>
+                                    <select defaultValue={""} required onChange={(e) => { setDateBooked([]); setDisabledDates([]); setBoatSelected(JSON.parse(e.target.value)) }}>
+                                        <option value="" disabled>Sélectionner</option>
+                                        {infosBoats && infosBoats.map((item) => (
+                                            <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
+                                        ))}
+                                    </select>
+                                    {boatSelected === "" || loading === true ?
+                                        <></>
+                                        :
+                                        <DateRangeComp
+                                            handleChange={handleChange}
+                                            disabledDates={disabledDates}
+                                        />
+                                    }
+                                    <PrimaryButton type="submit">
+                                        {createStatus === "pending" ? "En cours..." : "Valider"}
+                                    </PrimaryButton>
+                                </div>
                             </StyledForm>
                         </StyledCreateProduct>
                     </div>
@@ -235,6 +250,7 @@ const OwnerSpace = () => {
                                                                 <p>Au : {product.endLocation}</p>
                                                             </div>
                                                         ))}
+                                                        <button onClick={() => handleDelete(userOrders._id)}>Supprimer</button>
                                                     </div>
                                                 );
                                             }

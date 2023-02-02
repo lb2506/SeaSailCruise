@@ -59,8 +59,6 @@ const Calendrier = () => {
         fetchData()
     }, []);
 
-    console.log(orders);
-
     return (
         <>
             <h2 style={{ marginBottom: '1rem' }}>Calendrier</h2>

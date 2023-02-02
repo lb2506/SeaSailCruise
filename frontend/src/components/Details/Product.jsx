@@ -93,7 +93,7 @@ const Product = () => {
             return disabledDates;
         })
 
-    }, [dateBooked, ONE_DAY, disabledDates])
+    }, [dateBooked, ONE_DAY])
 
 
     const handleAddToCart = ({ product, dureeLoc, locStart, locEnd, choiceGuide }) => {

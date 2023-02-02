@@ -19,7 +19,7 @@ router.post("/", isAdmin, async (req, res) => {
       (productId);
 
     if (productReservation) {
-      productReservation.reservation = [...productReservation.reservation, { userId: req.body.userId, userFirstName: req.body.userFirstName, userLastName: req.body.userLastName, startLocation: req.body.products[0].startLocation, endLocation: req.body.products[0].endLocation, dureeLocation: req.body.products[0].dureeLocation, choiceGuide: req.body.products[0].choiceGuide }]
+      productReservation.reservation = [...productReservation.reservation, { _id: savedOrder._id, userId: req.body.userId, userFirstName: req.body.userFirstName, userLastName: req.body.userLastName, startLocation: req.body.products[0].startLocation, endLocation: req.body.products[0].endLocation, dureeLocation: req.body.products[0].dureeLocation, choiceGuide: req.body.products[0].choiceGuide }]
       await productReservation.save();
       console.log("Réservation ajoutée au(x) produit(s)");
     } else {
@@ -31,6 +31,37 @@ router.post("/", isAdmin, async (req, res) => {
     res.status(500).send(err);
   }
 });
+
+//DELETE
+
+router.delete("/:id", isAdmin, async (req, res) => {
+  try {
+    const deletedOrder = await Order.findById(req.params.id);
+    const productId = deletedOrder.products[0].id;
+    const productReservation = await Product.findById(productId);
+
+    console.log(req.params.id);
+    console.log(productId);
+    console.log(productReservation);
+
+    if (productReservation) {
+      productReservation.reservation = productReservation.reservation.filter(
+        reservation => reservation._id.toString() !== deletedOrder._id.toString());
+
+      await productReservation.save();
+      console.log("Réservation supprimée du produit");
+    } else {
+      console.log("Product not found");
+    }
+
+    await deletedOrder.remove();
+    res.status(200).send("Order has been deleted...");
+  } catch (err) {
+    res.status(500).send(err);
+  }
+
+});
+
 
 //UPDATE
 router.put("/:id", isAdmin, async (req, res) => {
@@ -49,15 +80,6 @@ router.put("/:id", isAdmin, async (req, res) => {
   }
 });
 
-//DELETE
-router.delete("/:id", isAdmin, async (req, res) => {
-  try {
-    await Order.findByIdAndDelete(req.params.id);
-    res.status(200).send("Order has been deleted...");
-  } catch (err) {
-    res.status(500).send(err);
-  }
-});
 
 //GET USER ORDERS
 router.get("/find/:userId", isUser, async (req, res) => {

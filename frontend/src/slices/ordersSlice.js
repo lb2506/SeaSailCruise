@@ -8,6 +8,7 @@ const initialState = {
     list: [],
     status: null,
     createStatus: null,
+    deleteStatus: null,
 };
 
 export const ordersFetch = createAsyncThunk("orders/ordersFetch", async () => {
@@ -20,7 +21,15 @@ export const ordersFetch = createAsyncThunk("orders/ordersFetch", async () => {
 }
 );
 
-
+export const ordersDelete = createAsyncThunk("orders/ordersDelete", async (id) => {
+    try {
+        const response = await axios.delete(`${url}/orders/${id}`, setHeaders());
+        return response.data;
+    } catch (error) {
+        console.log(error);
+    }
+}
+);
 
 export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (value) => {
     try {
@@ -31,7 +40,6 @@ export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (value
     }
 }
 )
-
 
 export const ordersEditStatusOrder = createAsyncThunk("orders/ordersEditStatusOrder", async (values, { getState }) => {
     const state = getState();
@@ -111,6 +119,20 @@ const ordersSlice = createSlice({
         },
         [ordersCreate.rejected]: (state, action) => {
             state.createStatus = "rejected";
+        },
+        [ordersDelete.pending]: (state, action) => {
+            state.deleteStatus = "pending";
+        },
+        [ordersDelete.fulfilled]: (state, action) => {
+            const updatedOrders = state.list.filter(
+                (order) => order._id !== action.payload._id
+            );
+            state.list = updatedOrders;
+            state.deleteStatus = "success";
+            toast.success("Réservation supprimée !");
+        },
+        [ordersDelete.rejected]: (state, action) => {
+            state.deleteStatus = "rejected";
         },
         [ordersEditStatusOrder.pending]: (state, action) => {
             state.status = "pending";
