@@ -10,8 +10,7 @@ import DateRangeComp from "../Details/DatePicker";
 import { addDays } from 'date-fns'
 import { ordersCreate } from '../../slices/ordersSlice';
 import styled from "styled-components";
-
-
+import { PrimaryButton } from "../admin/CommonStyled";
 
 
 const OwnerSpace = () => {
@@ -20,15 +19,18 @@ const OwnerSpace = () => {
     const users = useSelector((state) => state.users.users);
     const auth = useSelector((state) => state.auth)
     const { items } = useSelector((state) => state.products);
+    const { createStatus } = useSelector((state) => state.orders);
+
 
     const [loading, setLoading] = useState(false);
 
     const [userBoats, setUserBoats] = useState([])
     const [infosBoats, setInfosBoats] = useState([])
-    const [boatSelection, setBoatSelection] = useState("");
+    const [boatSelected, setBoatSelected] = useState("");
     const [dateBooked, setDateBooked] = useState([]);
     const [disabledDates, setDisabledDates] = useState([]);
-    const [dureeLoc, setDureeLoc] = useState()
+    const [dureeLoc, setDureeLoc] = useState();
+    const [userOrders, setUserOrders] = useState([]);
 
 
     const groups = []
@@ -42,17 +44,11 @@ const OwnerSpace = () => {
         }
     ])
 
-
-    let ONE_DAY = 1000 * 60 * 60 * 24;
-
-    var date1_ms = range[0].startDate.getTime();
-    var date2_ms = range[0].endDate.getTime();
-
-    var difference_ms = Math.abs(date1_ms - date2_ms);
+    const ONE_DAY = 1000 * 60 * 60 * 24;
 
     useEffect(() => {
-        setDureeLoc(Math.round(difference_ms / ONE_DAY) + 1)
-    }, [range, ONE_DAY, difference_ms])
+        range[0].startDate && range[0].endDate && setDureeLoc(Math.round((range[0].endDate - range[0].startDate) / ONE_DAY) + 1)
+    }, [range])
 
 
     useEffect(() => {
@@ -78,8 +74,8 @@ const OwnerSpace = () => {
     }, [userBoats, items])
 
     useEffect(() => {
-        if (boatSelection) {
-            const boat = infosBoats.find((boat) => boat._id === boatSelection);
+        if (boatSelected) {
+            const boat = infosBoats.find((boat) => boat._id === boatSelected._id);
             const dates = boat.reservation.map((reservation) => {
                 return {
                     startDate: new Date(reservation.startLocation.split("/")[2], reservation.startLocation.split("/")[1] - 1, reservation.startLocation.split("/")[0]),
@@ -89,7 +85,7 @@ const OwnerSpace = () => {
             })
             setDateBooked(dates);
         }
-    }, [boatSelection, infosBoats])
+    }, [boatSelected, infosBoats])
 
     useEffect(() => {
         dateBooked && dateBooked.map((date) => {
@@ -111,7 +107,6 @@ const OwnerSpace = () => {
 
     }, [dateBooked])
 
-    console.log(disabledDates);
 
     infosBoats && infosBoats.map((order) => {
         groups.push({
@@ -136,6 +131,17 @@ const OwnerSpace = () => {
         setRange([item.selection])
     }
 
+    const line_items = [
+        {
+            id: boatSelected._id,
+            name: boatSelected.name,
+            dureeLocation: dureeLoc,
+            startLocation: range[0].startDate.toLocaleDateString(),
+            endLocation: range[0].endDate.toLocaleDateString(),
+            choiceGuide: "",
+        }
+    ];
+
     const handleSubmit = async (e) => {
         e.preventDefault()
         dispatch(
@@ -143,16 +149,30 @@ const OwnerSpace = () => {
                 userId: auth._id,
                 userFirstName: auth.firstName,
                 userLastName: auth.lastName,
-                products: "",
-                subtotal: "",
-                total: "",
-                payment_status: "A régler sur place",
-                type: "réservation propriétaire",
+                products: line_items,
+                subtotal: 0,
+                total: 0,
+                payment_status: "propriétaire",
+                type: "Propriétaire",
             })
         )
     }
 
-    console.log(auth);
+    useEffect(() => {
+        async function fetchData() {
+            setLoading(true);
+            try {
+                const res = await axios.get(`${url}/orders/find/${auth._id}`, setHeaders());
+
+                setUserOrders(res.data);
+            } catch (err) {
+                console.log(err);
+            }
+            setLoading(false)
+        }
+        fetchData()
+    }, []);
+
 
     return (
         <>
@@ -175,13 +195,13 @@ const OwnerSpace = () => {
                             <StyledForm onSubmit={handleSubmit}>
                                 <h2 style={{ marginBottom: '1rem', marginTop: '1rem' }}>Ajouter dates d'indisponibilités pour un bateau</h2>
                                 <small>Choix du bateau</small>
-                                <select defaultValue={""} required onChange={(e) => setBoatSelection(e.target.value)}>
+                                <select defaultValue={""} required onChange={(e) => { setDateBooked([]); setDisabledDates([]); setBoatSelected(JSON.parse(e.target.value)) }}>
                                     <option value="" disabled>Sélectionner</option>
                                     {infosBoats && infosBoats.map((item) => (
-                                        <option key={item._id} value={item._id}>{item.name}</option>
+                                        <option key={item._id} value={JSON.stringify(item)}>{item.name}</option>
                                     ))}
                                 </select>
-                                {boatSelection === "" || loading === true ?
+                                {boatSelected === "" || loading === true ?
                                     <></>
                                     :
                                     <DateRangeComp
@@ -189,11 +209,45 @@ const OwnerSpace = () => {
                                         disabledDates={disabledDates}
                                     />
                                 }
+                                <PrimaryButton type="submit">
+                                    {createStatus === "pending" ? "En cours..." : "Valider"}
+                                </PrimaryButton>
                             </StyledForm>
                         </StyledCreateProduct>
                     </div>
                     <div>
                         <h2 style={{ marginBottom: '1rem', marginTop: '1rem' }}>Dates d'indisponibilités</h2>
+                        <div>
+                            {loading ? (
+                                <p>Chargement des réservations...</p>
+                            ) : (
+                                <>
+                                    {userOrders && userOrders.length > 0 ? (
+                                        userOrders.map((userOrders) => {
+                                            if (userOrders.type === "Propriétaire") {
+                                                return (
+                                                    <div key={userOrders._id} style={{ display: 'flex', gap: '1rem' }}>
+                                                        {userOrders.products.map((product, index) => (
+                                                            <div key={index} style={{ display: 'flex', gap: '1rem' }}>
+                                                                <p>{product.name}</p>
+
+                                                                <p>Du : {product.startLocation}</p>
+                                                                <p>Au : {product.endLocation}</p>
+                                                            </div>
+                                                        ))}
+                                                    </div>
+                                                );
+                                            }
+                                        })
+
+                                    ) : (
+                                        <p>Vous n'avez bloqué aucune date.</p>
+                                    )}
+                                </>
+                            )}
+
+
+                        </div>
                     </div>
                 </>
             }
@@ -208,7 +262,7 @@ export default OwnerSpace;
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  width: 300px;
+  width: 50%;
   margin-top: 2rem;
 
   .select,

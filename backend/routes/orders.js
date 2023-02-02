@@ -8,6 +8,7 @@ const router = require("express").Router();
 //CREATE
 
 router.post("/", isAdmin, async (req, res) => {
+
   const newOrder = new Order(req.body);
 
   try {
@@ -114,7 +115,7 @@ router.get("/income", isAdmin, async (req, res) => {
   try {
 
     const income = await Order.aggregate([
-      { $match: { createdAt: { $gte: previousMonth } } },
+      { $match: { createdAt: { $gte: previousMonth }, type: { $ne: "Propriétaire" } } },
       {
         $project: {
           month: { $month: "$createdAt" },
@@ -128,7 +129,6 @@ router.get("/income", isAdmin, async (req, res) => {
         },
       },
     ]);
-
     res.status(200).send(income);
   }
   catch (err) {
@@ -176,7 +176,7 @@ router.get("/stats", isAdmin, async (req, res) => {
 
   try {
     const orders = await Order.aggregate([
-      { $match: { createdAt: { $gte: previousMonth } } },
+      { $match: { createdAt: { $gte: previousMonth }, type: { $ne: "Propriétaire" } } },
       {
         $project: {
           month: { $month: "$createdAt" },

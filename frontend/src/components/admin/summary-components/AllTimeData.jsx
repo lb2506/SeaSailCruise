@@ -9,21 +9,22 @@ const AllTimeData = () => {
 
     const dispatch = useDispatch();
 
-    const {items} = useSelector(state => state.products);
-    const {users} = useSelector((state) => state.users);
-    const {list} = useSelector((state) => state.orders);
+    const { items } = useSelector(state => state.products);
+    const { users } = useSelector((state) => state.users);
+    const { list } = useSelector((state) => state.orders);
     const CATotal = list && list.reduce((acc, item) => acc + item.total, 0);
+    const ownerOrders = list && list.filter(order => order.type === "Propriétaire");
 
     useEffect(() => {
-      dispatch(usersFetch());
-      dispatch(ordersFetch());
+        dispatch(usersFetch());
+        dispatch(ordersFetch());
     }, [dispatch]);
 
 
 
-    return(
+    return (
         <Main>
-        <h3>Global</h3>
+            <h3>Global</h3>
             <Info>
                 <Title>Utilisateurs</Title>
                 <Data>{users && users.length}</Data>
@@ -34,7 +35,7 @@ const AllTimeData = () => {
             </Info>
             <Info>
                 <Title>Réservations</Title>
-                <Data>{list && list.length}</Data>
+                <Data>{list && list.length} <span style={{ fontSize: '12px', fontStyle: 'italic' }}>(dont {ownerOrders && ownerOrders.length} propriétaire(s))</span></Data>
             </Info>
             <Info>
                 <Title>Chiffre d'affaires</Title>

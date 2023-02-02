@@ -31,7 +31,6 @@ const Summary = () => {
     async function fetchData() {
       try {
         const res = await axios.get(`${url}/users/stats`, setHeaders())
-
         res.data.sort(compare)
         setUsers(res.data);
         setUsersPerc(
@@ -66,7 +65,6 @@ const Summary = () => {
     async function fetchData() {
       try {
         const res = await axios.get(`${url}/orders/income`, setHeaders())
-
         res.data.sort(compare)
         setIncome(res.data);
         setIncomePerc(

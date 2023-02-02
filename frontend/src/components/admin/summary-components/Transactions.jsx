@@ -13,13 +13,13 @@ const Transactions = () => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        async function fetchData(){
+        async function fetchData() {
             setIsLoading(true);
-            try{
+            try {
                 const res = await axios.get(`${url}/orders/?new=true`, setHeaders());
 
                 setOrders(res.data);
-            } catch(err){
+            } catch (err) {
                 console.log(err);
             }
             setIsLoading(false)
@@ -27,21 +27,25 @@ const Transactions = () => {
         fetchData()
     }, []);
 
-    return(
+    return (
         <StyledTransactions>
             {isLoading ? (
-            <p>Chargement des dernières transactions...</p>
+                <p>Chargement des dernières transactions...</p>
             ) : (
-            <>
-                <h3>Dernières transactions</h3>
-                {
-                    orders?.map((order, index) => <Transaction key={index}>
-                        <p>{order.userFirstName} {order.userLastName}</p>
-                        <p>{(order.total).toLocaleString() + ' €'}</p>
-                        <p>{moment(order.createdAt).fromNow()}</p>
-                    </Transaction>)
-                }
-            </>
+                <>
+                    <h3>Dernières transactions</h3>
+                    {
+                        orders?.map((order, index) => <Transaction key={index}>
+                            <p>{order.userFirstName} {order.userLastName}</p>
+                            {(order.total).toLocaleString() === "0" ?
+                                <p>Propriétaire</p>
+                                :
+                                <p>{(order.total).toLocaleString() + ' €'}</p>
+                            }
+                            <p>{moment(order.createdAt).fromNow()}</p>
+                        </Transaction>)
+                    }
+                </>
             )}
         </StyledTransactions>
     );
