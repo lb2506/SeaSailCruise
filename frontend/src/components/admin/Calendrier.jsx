@@ -6,14 +6,12 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { setHeaders, url } from "../../slices/api";
 
-
 const Calendrier = () => {
 
     const [orders, setOrders] = useState([]);
     const [loading, setLoading] = useState(false);
     const [selectedItem, setSelectedItem] = useState(null);
     const [item, setItem] = useState({});
-
 
     const groups = []
     const items = []
@@ -72,7 +70,6 @@ const Calendrier = () => {
                         items={items}
                         defaultTimeStart={moment()}
                         defaultTimeEnd={moment().add(31, 'day')}
-                        // {...console.log(items)}
                         onItemSelect={(item) => {
                             setSelectedItem(item)
                         }}

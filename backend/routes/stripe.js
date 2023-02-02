@@ -28,6 +28,7 @@ router.post("/create-payment-intent", async (req, res) => {
   })
 
   // Create a PaymentIntent with the order amount, currency and metadata
+
   const paymentIntent = await stripe.paymentIntents.create({
     amount: calculateOrderAmount(items),
     currency: "eur",
@@ -63,6 +64,8 @@ const createOrder = async (data) => {
   try {
     const savedOrder = await newOrder.save();
 
+    // ajout de la réservation sur chaque bateaux possedants une nouvelle réservation
+
     const productsParse = JSON.parse(data.metadata.products);
 
     productsParse.forEach(async (product) => {
@@ -84,10 +87,6 @@ const createOrder = async (data) => {
   } catch (err) {
     console.log(err);
   }
-
-  // ajout de la réservation dans le produit en fonction de l'id du produit
-
-
 };
 
 
