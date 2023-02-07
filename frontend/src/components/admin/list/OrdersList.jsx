@@ -54,7 +54,7 @@ export default function OrdersList() {
             renderCell: (params) => {
                 return (
                     <>
-                        {params.row.payment === "succeeded" || "propriétaire" ? <Accepted>Payé</Accepted> :
+                        {params.row.payment === "succeeded" || params.row.payment === "propriétaire" ? <Accepted>Payé</Accepted> :
                             params.row.payment === "A régler sur place" ? <Pending>A régler</Pending> :
                                 "Erreur"
                         }

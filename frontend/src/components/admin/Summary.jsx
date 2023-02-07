@@ -7,6 +7,7 @@ import Widget from "./summary-components/Widget";
 import Chart from "./summary-components/Chart";
 import Transactions from "./summary-components/Transactions";
 import AllTimeData from "./summary-components/AllTimeData";
+import PaymentPending from "./summary-components/PaymentsPending";
 
 const Summary = () => {
 
@@ -64,7 +65,7 @@ const Summary = () => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const res = await axios.get(`${url}/orders/income`, setHeaders())
+        const res = await axios.get(`${url}/orders/income`, setHeaders());
         res.data.sort(compare)
         setIncome(res.data);
         setIncomePerc(
@@ -123,6 +124,7 @@ const Summary = () => {
     </MainStats>
     <SideStats>
       <Transactions />
+      <PaymentPending />
       <AllTimeData />
     </SideStats>
   </StyledSummary>

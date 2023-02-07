@@ -137,7 +137,7 @@ router.get("/income", isAdmin, async (req, res) => {
   try {
 
     const income = await Order.aggregate([
-      { $match: { createdAt: { $gte: previousMonth }, type: { $ne: "Propriétaire" } } },
+      { $match: { createdAt: { $gte: previousMonth }, payment_status: { $in: ["paid", "succeeded"] }, type: { $ne: "Propriétaire" } } },
       {
         $project: {
           month: { $month: "$createdAt" },
@@ -168,7 +168,7 @@ router.get("/week-sales", async (req, res) => {
 
   try {
     const sales = await Order.aggregate([
-      { $match: { createdAt: { $gte: lastWeek } } },
+      { $match: { createdAt: { $gte: lastWeek }, payment_status: { $in: ["paid", "succeeded"] }, type: { $ne: "Propriétaire" } } },
       {
         $project: {
           date: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
@@ -188,6 +188,7 @@ router.get("/week-sales", async (req, res) => {
     res.status(500).send(err);
   }
 });
+
 
 // GET ORDERS STATS
 

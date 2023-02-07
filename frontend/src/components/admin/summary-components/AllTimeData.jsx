@@ -12,15 +12,14 @@ const AllTimeData = () => {
     const { items } = useSelector(state => state.products);
     const { users } = useSelector((state) => state.users);
     const { list } = useSelector((state) => state.orders);
-    const CATotal = list && list.reduce((acc, item) => acc + item.total, 0);
+    const orders = list && list.filter(order => order.payment_status === "paid" || order.payment_status === "succeeded" || order.payment_status === "A régler sur place");
+    const CATotal = list && list.filter(order => order.payment_status === "paid" || order.payment_status === "succeeded").reduce((acc, order) => acc + order.total, 0);
     const ownerOrders = list && list.filter(order => order.type === "Propriétaire");
 
     useEffect(() => {
         dispatch(usersFetch());
         dispatch(ordersFetch());
     }, [dispatch]);
-
-
 
     return (
         <Main>
@@ -35,7 +34,7 @@ const AllTimeData = () => {
             </Info>
             <Info>
                 <Title>Réservations</Title>
-                <Data>{list && list.length} <span style={{ fontSize: '12px', fontStyle: 'italic' }}>(dont {ownerOrders && ownerOrders.length} propriétaire(s))</span></Data>
+                <Data>{orders && orders.length} <span style={{ fontSize: '12px', fontStyle: 'italic' }}>( + {ownerOrders && ownerOrders.length} propriétaire(s))</span></Data>
             </Info>
             <Info>
                 <Title>Chiffre d'affaires</Title>
@@ -46,6 +45,7 @@ const AllTimeData = () => {
 }
 
 export default AllTimeData;
+
 
 const Main = styled.div`
     background: rgb(48, 51, 78);
