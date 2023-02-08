@@ -2,8 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { url, setHeaders } from "../../slices/api";
-import { useSelector } from "react-redux";
-
 
 const UserOrders = () => {
 
@@ -39,15 +37,17 @@ const UserOrders = () => {
                             userOrders.map((userOrder) => {
                                 if (userOrder.type !== "Propriétaire") {
                                     return (
-                                        <div key={userOrder._id} style={{ display: 'flex', gap: '1rem' }}>
-                                            {JSON.parse(userOrder.products).map((product, index) => (
-                                                <div key={index} style={{ display: 'flex', gap: '1rem' }}>
-                                                    <p>{product.name}</p>
-                                                    <p>{product.choiceGuide}</p>
-                                                    <p>Du : {product.startLocation}</p>
-                                                    <p>Au : {product.endLocation}</p>
-                                                </div>
-                                            ))}
+                                        <div key={userOrder._id} style={{ display: 'flex', gap: '1rem', alignItems: 'center', padding: '1rem 0 ', borderBottom: '1px solid black', justifyContent: 'space-between' }}>
+                                            <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                                {JSON.parse(userOrder.products).map((product, index) => (
+                                                    <div key={index} style={{ display: 'flex', gap: '1rem' }}>
+                                                        <p>{product.name}</p>
+                                                        <p>{product.choiceGuide}</p>
+                                                        <p>Du : {product.startLocation}</p>
+                                                        <p>Au : {product.endLocation}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
                                             <p>Montant de la location : {userOrder.total} €</p>
                                             <p>Statut de la commande : {userOrder.order_status === "pending" ? "En attente" : userOrder.order_status === "accepted" ? "Acceptée" : userOrder.order_status === "refused" ? "Refusée" : "Erreur"}</p>
                                         </div>

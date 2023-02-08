@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { setHeaders, url } from "../../slices/api";
@@ -16,6 +15,7 @@ const UserProfileData = () => {
         email: "",
         isAdmin: false,
         password: "",
+        confirmPassword: "",
     });
 
     const [loading, setLoading] = useState(false);
@@ -29,7 +29,6 @@ const UserProfileData = () => {
                     `${url}/users/find/${auth._id}`,
                     setHeaders()
                 );
-
                 setUser({ ...res.data, password: "" });
                 setLoading(false);
             } catch (err) {
@@ -43,7 +42,12 @@ const UserProfileData = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        if (user.password !== user.confirmPassword) {
+            toast.error("Les mots de passe ne correspondent pas.", {
+                position: "bottom-left",
+            });
+            return;
+        }
         try {
             setUpdating(true);
             const res = await axios.put(
@@ -54,7 +58,7 @@ const UserProfileData = () => {
                 setHeaders()
             );
 
-            setUser({ ...res.data, password: "" });
+            setUser({ ...res.data, password: "", confirmPassword: "" });
             toast.success("Profil mis à jour...", {
                 position: "bottom-left",
             });
@@ -68,6 +72,7 @@ const UserProfileData = () => {
             });
         }
     };
+
 
 
     if (!auth.isAdmin) return <p>Accès refusé.</p>;
@@ -101,12 +106,19 @@ const UserProfileData = () => {
                             value={user.email}
                             onChange={(e) => setUser({ ...user, email: e.target.value })}
                         />
-                        <label htmlFor="password">Mot de passe :</label>
+                        <label htmlFor="password">Nouveau mot de passe :</label>
                         <input
-                            type="text"
+                            type="password"
                             value={user.password}
                             id="password"
                             onChange={(e) => setUser({ ...user, password: e.target.value })}
+                        />
+                        <label htmlFor="password">Confirmez le mot de passe :</label>
+                        <input
+                            type="password"
+                            value={user.confirmPassword}
+                            id="confirmPassword"
+                            onChange={(e) => setUser({ ...user, confirmPassword: e.target.value })}
                         />
                         <button>{updating ? "Mise à jour..." : "Mettre à jour"}</button>
                     </form>
@@ -153,21 +165,4 @@ const ProfileContainer = styled.div`
       border-bottom: 1px solid gray;
     }
   }
-`;
-
-const Admin = styled.div`
-  color: rgb(253, 181, 40);
-  background: rgb(253, 181, 40, 0.12);
-  padding: 3px 5px;
-  border-radius: 3px;
-  font-size: 14px;
-  margin-bottom: 1rem;
-`;
-const Customer = styled.div`
-  color: rgb(38, 198, 249);
-  background-color: rgb(38, 198, 249, 0.12);
-  padding: 3px 5px;
-  border-radius: 3px;
-  font-size: 14px;
-  margin-bottom: 1rem;
 `;

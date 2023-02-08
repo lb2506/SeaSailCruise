@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { userDelete, usersFetch } from "../../../slices/usersSlice";
 import EmailContact from "../../Details/EmailContact";
 
@@ -123,9 +122,6 @@ const Actions = styled.div`
 const Delete = styled.button`
   background-color: rgb(255, 77, 73);
 `;
-const View = styled.button`
-  background-color: rgb(114, 225, 40);
-`;
 
 const Contact = styled.button`
   background-color: rgb(114, 225, 40);
@@ -146,19 +142,3 @@ const Customer = styled.div`
   border-radius: 3px;
   font-size: 14px;
 `;
-
-const NotOwner = styled.div`
-color: rgb(209, 0, 246);
-background-color: rgb(209, 0, 246, 0.12);
-padding: 3px 5px;
-border-radius: 3px;
-font-size: 14px;
-`
-
-const Owner = styled.div`
-color: rgb(69, 246, 0);
-background-color: rgb(69, 246, 0, 0.12);
-padding: 3px 5px;
-border-radius: 3px;
-font-size: 14px;
-`

@@ -2,12 +2,10 @@ import { useEffect, useState } from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
 import { userDelete, usersFetch } from "../../../slices/usersSlice";
 import EmailContact from "../../Details/EmailContact";
 
 export default function UsersList() {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { users } = useSelector((state) => state.users);
 
@@ -138,9 +136,6 @@ const Actions = styled.div`
 
 const Delete = styled.button`
   background-color: rgb(255, 77, 73);
-`;
-const View = styled.button`
-  background-color: rgb(114, 225, 40);
 `;
 
 const Contact = styled.button`
