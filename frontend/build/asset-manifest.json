@@ -1,24 +1,24 @@
 {
   "files": {
-    "main.css": "/static/css/main.e0d8cef8.chunk.css",
-    "main.js": "/static/js/main.c1bc6832.chunk.js",
-    "main.js.map": "/static/js/main.c1bc6832.chunk.js.map",
-    "runtime-main.js": "/static/js/runtime-main.8233b8b5.js",
-    "runtime-main.js.map": "/static/js/runtime-main.8233b8b5.js.map",
-    "static/css/2.f60437bb.chunk.css": "/static/css/2.f60437bb.chunk.css",
-    "static/js/2.4c752b1e.chunk.js": "/static/js/2.4c752b1e.chunk.js",
-    "static/js/2.4c752b1e.chunk.js.map": "/static/js/2.4c752b1e.chunk.js.map",
-    "index.html": "/index.html",
-    "static/css/2.f60437bb.chunk.css.map": "/static/css/2.f60437bb.chunk.css.map",
-    "static/css/main.e0d8cef8.chunk.css.map": "/static/css/main.e0d8cef8.chunk.css.map",
-    "static/js/2.4c752b1e.chunk.js.LICENSE.txt": "/static/js/2.4c752b1e.chunk.js.LICENSE.txt",
-    "static/media/logo.d4b23b55.png": "/static/media/logo.d4b23b55.png",
-    "static/media/logoWhite.d9fd5d11.png": "/static/media/logoWhite.d9fd5d11.png"
+    "main.css": "/SeaSailCruise/static/css/main.e0d8cef8.chunk.css",
+    "main.js": "/SeaSailCruise/static/js/main.c1bc6832.chunk.js",
+    "main.js.map": "/SeaSailCruise/static/js/main.c1bc6832.chunk.js.map",
+    "runtime-main.js": "/SeaSailCruise/static/js/runtime-main.02d8304b.js",
+    "runtime-main.js.map": "/SeaSailCruise/static/js/runtime-main.02d8304b.js.map",
+    "static/css/2.f60437bb.chunk.css": "/SeaSailCruise/static/css/2.f60437bb.chunk.css",
+    "static/js/2.001e5ad6.chunk.js": "/SeaSailCruise/static/js/2.001e5ad6.chunk.js",
+    "static/js/2.001e5ad6.chunk.js.map": "/SeaSailCruise/static/js/2.001e5ad6.chunk.js.map",
+    "index.html": "/SeaSailCruise/index.html",
+    "static/css/2.f60437bb.chunk.css.map": "/SeaSailCruise/static/css/2.f60437bb.chunk.css.map",
+    "static/css/main.e0d8cef8.chunk.css.map": "/SeaSailCruise/static/css/main.e0d8cef8.chunk.css.map",
+    "static/js/2.001e5ad6.chunk.js.LICENSE.txt": "/SeaSailCruise/static/js/2.001e5ad6.chunk.js.LICENSE.txt",
+    "static/media/logo.d4b23b55.png": "/SeaSailCruise/static/media/logo.d4b23b55.png",
+    "static/media/logoWhite.d9fd5d11.png": "/SeaSailCruise/static/media/logoWhite.d9fd5d11.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.8233b8b5.js",
+    "static/js/runtime-main.02d8304b.js",
     "static/css/2.f60437bb.chunk.css",
-    "static/js/2.4c752b1e.chunk.js",
+    "static/js/2.001e5ad6.chunk.js",
     "static/css/main.e0d8cef8.chunk.css",
     "static/js/main.c1bc6832.chunk.js"
   ]
