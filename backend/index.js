@@ -10,7 +10,6 @@ const users = require("./routes/users");
 const contracts = require("./routes/contracts");
 const bodyParser = require('body-parser');
 
-
 const app = express();
 
 require("dotenv").config();

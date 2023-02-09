@@ -12,7 +12,6 @@ import { ordersCreate, ordersDelete } from '../../slices/ordersSlice';
 import styled from "styled-components";
 import { PrimaryButton } from "../admin/CommonStyled";
 
-
 const OwnerSpace = () => {
 
     const dispatch = useDispatch();
