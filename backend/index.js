@@ -29,8 +29,8 @@ app.use("/api/products", productsRoute);
 app.use("/api/users", users);
 app.use("/api/contracts", contracts);
 
-app.use("/", (req, res) => {
-  res.json({ message: "Bienvenue sur l'API de réservation en ligne..." });
+app.get("/", (req, res) => {
+  res.send("Bienvenue sur l'API de réservation en ligne...");
 });
 
 app.get("/products", (req, res) => {
