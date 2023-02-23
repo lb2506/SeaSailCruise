@@ -48,9 +48,8 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
+  padding: 0 140px;
   margin: 0 auto;
-  max-width: 1170px;
 }
 
 .logo-ctn {
@@ -490,7 +489,6 @@
   padding: 2rem 0;
   border-bottom: 1px solid #d2d6de;
   color: #434343;
-
 }
 
 .details {
@@ -752,7 +750,7 @@ input.inputBox {
 }
 
 .overlay {
-  position: fixed;
+  position: absolute;
   z-index: 1000;
   top: 0;
   left: 0;
@@ -832,6 +830,99 @@ input.inputBox {
   cursor: pointer;
 
 }
+
+/* Admin --- Create contract */
+
+.newContract-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.popup-content {
+  border-radius: 10px;
+}
+
+.modal {
+  font-size: 12px;
+}
+
+.modal>.header {
+  width: 100%;
+  border-bottom: 1px solid gray;
+  font-size: 18px;
+  text-align: center;
+  padding: 5px;
+}
+
+.modal>.content {
+  width: 100%;
+  padding: 10px 20px;
+  max-height: 50vh;
+  overflow: scroll;
+}
+
+.modal>.actions {
+  width: 100%;
+  padding: 10px 5px;
+  margin: auto;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.actions-btn {
+  display: flex;
+  gap: 10px;
+}
+
+.modal>.close {
+  cursor: pointer;
+  position: absolute;
+  display: block;
+  padding: 2px 5px;
+  line-height: 20px;
+  right: -10px;
+  top: -10px;
+  font-size: 24px;
+  background: #ffffff;
+  border-radius: 18px;
+  border: 1px solid #cfcece;
+}
+
+.pictures-edl {
+  display: inline-block;
+  position: relative;
+  cursor: pointer;
+}
+
+.remove-imageContract {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 4px;
+  border-radius: 4px;
+  display: none;
+}
+
+.remove-imageContract--visible {
+  display: block;
+  pointer-events: none;
+}
+
+.signature {
+  border: 1px solid black;
+  width: 100%;
+}
+
+input[type='file'] {
+  color: transparent;
+}
+
 
 /* Admin --- Create product */
 

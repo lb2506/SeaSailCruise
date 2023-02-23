@@ -16,4 +16,10 @@ export const PrimaryButton = styled.button`
   outline: none;
   cursor: pointer;
   margin: 0.5rem 0;
+
+  &:disabled {
+    background-color: #bfbfbf;
+    color: #7a7a7a;
+    cursor: not-allowed;
+  }
 `;

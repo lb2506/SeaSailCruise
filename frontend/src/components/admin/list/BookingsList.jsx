@@ -1,9 +1,8 @@
 import styled from "styled-components";
-import * as React from "react";
+import React, { useEffect } from "react";
 import { DataGrid } from '@mui/x-data-grid';
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 import { ordersEditStatusOrder, ordersFetch, ordersEditStatusPayment } from "../../../slices/ordersSlice";
 import moment from "moment";
 
@@ -17,20 +16,20 @@ export default function OrdersList() {
         dispatch(ordersFetch())
     }, [dispatch]);
 
+
     const rows = list && list.map(order => {
         return {
             id: order._id,
             cName: [order.userFirstName + " " + order.userLastName],
             amount: order.total.toLocaleString(),
             oStatus: order.order_status,
-            date: moment(order.createdAt).fromNow(),
+            date: moment(order.createdAt).locale('fr').format('dddd DD MMMM YYYY'),
             type: order.type,
             payment: order.payment_status
         }
     })
 
     const columns = [
-        // { field: 'id', headerName: 'ID', width: 120 },
         { field: 'cName', headerName: 'Client', width: 150 },
         { field: 'amount', headerName: 'Montant (€)', width: 100 },
         {
@@ -47,7 +46,7 @@ export default function OrdersList() {
                 )
             }
         },
-        { field: 'date', headerName: 'Date', width: 150 },
+        { field: 'date', headerName: 'Date', width: 200 },
         { field: 'type', headerName: 'Méthode de réservation', width: 170 },
         {
             field: 'payment', headerName: 'Statut du paiement', width: 160,
@@ -61,7 +60,11 @@ export default function OrdersList() {
                     </>
                 )
             }
-        }, {
+        },
+        {
+            field: 'contract', headerName: 'Contrat', width: 150
+        },
+        {
             field: 'acceptPayment',
             headerName: 'Paiement',
             sortable: false,
@@ -82,8 +85,7 @@ export default function OrdersList() {
             field: 'actions',
             headerName: 'Actions',
             sortable: false,
-
-            width: 220,
+            width: 320,
             renderCell: (params) => {
                 return (
                     <>
@@ -91,6 +93,7 @@ export default function OrdersList() {
                             <AcceptBtn onClick={() => handleOrderDispatch(params.row.id)}>Accepter</AcceptBtn>
                             <RefuseBtn onClick={() => handleOrderRefused(params.row.id)}>Refuser</RefuseBtn>
                             <View onClick={() => navigate(`/order/${params.row.id}`)}>Voir</View>
+                            <Contract onClick={() => navigate(`/booking/new-contract/${params.row.id}`)}>Créer contrat</Contract>
                         </Actions>
                     </>
                 )
@@ -120,15 +123,18 @@ export default function OrdersList() {
     }
 
     return (
-        <div style={{ height: 800, width: '100%' }}>
-            <DataGrid
-                rows={rows}
-                columns={columns}
-                pageSize={50}
-                rowsPerPageOptions={[50]}
-                disableSelectionOnClick
-            />
-        </div>
+        <>
+            <div style={{ height: 800, width: '100%' }}>
+                <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={50}
+                    rowsPerPageOptions={[50]}
+                    disableSelectionOnClick
+                />
+            </div>
+
+        </>
     );
 }
 
@@ -143,6 +149,10 @@ const RefuseBtn = styled.button`
 
 const View = styled.button`
     background-color: rgb(114, 225, 40);
+`;
+
+const Contract = styled.button`
+    background-color: rgb(160, 40, 225);
 `;
 
 const AcceptPayment = styled.button`

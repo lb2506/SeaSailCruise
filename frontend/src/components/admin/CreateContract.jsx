@@ -28,6 +28,7 @@ let CreateContract = () => {
     createStatus === "success" &&
         setTimeout(() => {
             navigate("/admin/contract")
+            window.location.reload()
         }, 1000)
 
     return (

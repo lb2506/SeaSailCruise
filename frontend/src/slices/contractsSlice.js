@@ -4,7 +4,7 @@ import { url, setHeaders } from './api';
 import { toast } from 'react-toastify';
 
 const initialState = {
-    list: [],
+    contracts: [],
     status: null,
     createStatus: null,
     editStatus: null,
@@ -76,7 +76,7 @@ const contractsSlice = createSlice({
             state.status = "pending";
         },
         [contractsFetch.fulfilled]: (state, action) => {
-            state.list = action.payload;
+            state.contracts = action.payload;
             state.status = "success";
         },
         [contractsFetch.rejected]: (state, action) => {
@@ -86,7 +86,7 @@ const contractsSlice = createSlice({
             state.createStatus = 'pending';
         },
         [contractsCreate.fulfilled]: (state, action) => {
-            state.list.push(action.payload);
+            state.contracts.push(action.payload);
             state.createStatus = 'success';
             toast.success('Nouveau contrat enregistré', { position: 'bottom-left' });
         },
@@ -97,7 +97,7 @@ const contractsSlice = createSlice({
             state.editStatus = 'pending';
         },
         [contractsEdit.fulfilled]: (state, action) => {
-            const newList = state.list.map((contract) => {
+            const newContracts = state.contracts.map((contract) => {
                 if (contract._id === action.payload._id) {
                     return action.payload;
                 } else {
@@ -105,7 +105,7 @@ const contractsSlice = createSlice({
                 }
             }
             );
-            state.list = newList;
+            state.contracts = newContracts;
             state.editStatus = 'success';
             toast.success('Contrat mis à jour', { position: 'bottom-left' });
         },
@@ -116,8 +116,8 @@ const contractsSlice = createSlice({
             state.deleteStatus = 'pending';
         },
         [contractsDelete.fulfilled]: (state, action) => {
-            const newList = state.list.filter((contract) => contract._id !== action.payload._id);
-            state.list = newList;
+            const newContracts = state.contracts.filter((contract) => contract._id !== action.payload._id);
+            state.contracts = newContracts;
             state.deleteStatus = 'success';
         },
         [contractsDelete.rejected]: (state, action) => {

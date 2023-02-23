@@ -17,7 +17,7 @@ import CheckoutSuccess from "./components/CheckoutSuccess";
 import Dashboard from "./components/admin/Dashboard";
 import Products from "./components/admin/Products";
 import Users from "./components/admin/Users";
-import Orders from "./components/admin/Oders";
+import Bookings from "./components/admin/Bookings";
 import Summary from "./components/admin/Summary";
 import CreateProduct from "./components/admin/CreateProduct";
 import ProductsList from "./components/admin/list/ProductsList";
@@ -30,7 +30,7 @@ import UserProfileData from "./components/account/UserProfileData";
 import Payment from "./components/Payment";
 import Calendrier from "./components/admin/Calendrier";
 import Contrat from "./components/admin/Contrat";
-import OrdersList from "./components/admin/list/OrdersList";
+import BookingsList from "./components/admin/list/BookingsList";
 import CreateBooking from "./components/admin/CreateBooking";
 import CreateContract from "./components/admin/CreateContract";
 import ContractsList from "./components/admin/list/ContractsList";
@@ -38,6 +38,7 @@ import Owners from "./components/admin/Owners";
 import OwnersList from "./components/admin/list/OwnersList";
 import CreateOwner from "./components/admin/CreateOwner";
 import OwnerSpace from "./components/account/OwnerSpace";
+import NewContract from "./components/Details/NewContract";
 
 
 function App() {
@@ -60,7 +61,8 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/product/:id" element={<Product />} />
-            <Route path="/order/:id" element={<Order />} />
+            <Route path="/booking/:id" element={<Order />} />
+            <Route path="/booking/new-contract/:id" element={<NewContract />} />
             <Route path="/user/:id" element={<UserProfile />} />
             <Route path="/admin" element={<Dashboard />}>
               <Route path="summary" element={<Summary />} />
@@ -73,8 +75,8 @@ function App() {
                 <Route index element={<OwnersList />} />
                 <Route path="create-owner" element={<CreateOwner />} />
               </Route>
-              <Route path="orders" element={<Orders />} >
-                <Route index element={<OrdersList />} />
+              <Route path="bookings" element={<Bookings />} >
+                <Route index element={<BookingsList />} />
                 <Route path="create-booking" element={<CreateBooking />} />
               </Route>
               <Route path="calendar" element={<Calendrier />} />
