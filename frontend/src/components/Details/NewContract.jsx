@@ -5,11 +5,15 @@ import { PrimaryButton } from "../admin/CommonStyled";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import SignatureCanvas from 'react-signature-canvas'
-import { PDFDocument, rgb, StandardFonts } from 'pdf-lib';
+import ContractToPrint from "./ContractToPrint";
+import JsPDF from 'jspdf';
+import { useParams } from "react-router-dom";
 
 
 const NewContract = () => {
 
+    // const params = useParams();
+    // const { list } = useSelector((state) => state.orders);
     const { contracts } = useSelector((state) => state.contracts);
 
     const [value, setValue] = useState("");
@@ -18,6 +22,8 @@ const NewContract = () => {
     const [contractDetails, setContractDetails] = useState(null);
     const [signature, setSignature] = useState(null);
     const [signaturePresente, setSignaturePresente] = useState(false);
+    // const [order, setOrder] = useState(null);
+
 
     const sigCanvas = useRef(null);
     const popupRef = useRef();
@@ -30,6 +36,13 @@ const NewContract = () => {
         }
 
     }, [selectedContract])
+
+    // useEffect(() => {
+    //     if (params.id) {
+    //         const order = list.find(item => item._id === params.id);
+    //         setOrder(order);
+    //     }
+    // }, [params.id])
 
     const handlePicturesContract = (e) => {
         const files = e.target.files;
@@ -73,74 +86,21 @@ const NewContract = () => {
     };
 
     const handleValidate = async () => {
-        const pdfDoc = await PDFDocument.create();
-
-        // Ajouter une page au document
-        const page = pdfDoc.addPage();
-
-        // Obtenir la taille de la page
-        const { width, height } = page.getSize();
-
-        // Ajouter du texte à la page
-        const font = await pdfDoc.embedFont(StandardFonts.Helvetica);
-        const fontSize = 24;
-        const text = value;
-        const textWidth = font.widthOfTextAtSize(text, fontSize);
-        const textHeight = font.heightAtSize(fontSize);
-        page.drawText(text, {
-            x: (width - textWidth) / 2,
-            y: height - 50 - textHeight,
-            size: fontSize,
-            font: font,
-            color: rgb(0, 0, 0),
-        });
-
-        console.log();
-
-        // Ajouter les photos
-        if (picturesContract) {
-            for (let i = 0; i < picturesContract.length; i++) {
-                const imageUrl = picturesContract[i];
-                const image = await fetch(imageUrl).then((res) => res.arrayBuffer());
-                const embeddedImage = await pdfDoc.embedJpg(image);
-                const imageWidth = 280;
-                const imageHeight = imageWidth * embeddedImage.height / embeddedImage.width;
-                const x = (width / 2) * (i % 2) + (width - 2 * imageWidth) / 2;
-                const y = height - 50 - textHeight - 10 - (Math.floor(i / 2) + 1) * (imageHeight + 10);
-                page.drawImage(embeddedImage, {
-                    x: x,
-                    y: y,
-                    width: imageWidth,
-                    height: imageHeight,
-                });
-            }
-        }
-
-
-        // Ajouter la signature
-        if (signature) {
-            const signatureImage = await pdfDoc.embedPng(signature.split(',')[1]);
-            const signatureWidth = 150;
-            const signatureHeight = signatureWidth * signatureImage.height / signatureImage.width;
-            page.drawImage(signatureImage, {
-                x: (width - signatureWidth) / 2,
-                y: height - 50 - textHeight - signatureHeight - 10,
-                width: signatureWidth,
-                height: signatureHeight,
-            });
-        }
-
-        // Télécharger le document PDF
-        const pdfBytes = await pdfDoc.save();
-        const blob = new Blob([pdfBytes], { type: 'application/pdf' });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'contrat.pdf';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        var doc = new JsPDF("p", "pt", "a4");
+        var source = document.querySelector("#contract-to-print");
+        var margins = [50, 0, 50, 0]; // top, right, bottom, left
+        var options = {
+            // Options pour la conversion HTML en PDF
+            callback: function (dispose) {
+                // dispose: object with X, Y of the last line add to the PDF
+                //          this allow the insertion of new lines after html
+                doc.save("Test.pdf");
+            },
+            margin: margins,
+        };
+        doc.html(source, options);
     };
+
 
 
     return (
@@ -200,45 +160,6 @@ const NewContract = () => {
                     }
                     <div className="actions-btn">
                         <Popup
-                            trigger={<PrimaryButton>Aperçu</PrimaryButton>}
-                            modal
-                            nested
-                        >
-                            {close => (
-                                <div className="modal">
-                                    <button className="close" onClick={close}>
-                                        &times;
-                                    </button>
-                                    <div className="header"> Création d'un nouveau contrat </div>
-                                    <div className="content">
-                                        <div dangerouslySetInnerHTML={{ __html: value }} />
-                                        {picturesContract && picturesContract.map((item, index) => (
-                                            <img key={index}
-                                                src={item}
-                                                alt="EDL"
-                                                className="pictures-edl"
-                                            />
-                                        ))}
-                                    </div>
-                                    {signature &&
-                                        <div>
-                                            <img style={{ maxWidth: '350px' }} src={signature} alt="Signature" />
-                                        </div>
-                                    }
-                                    <div className="actions">
-                                        <PrimaryButton
-                                            className="button"
-                                            onClick={() => {
-                                                close();
-                                            }}
-                                        >
-                                            Retour
-                                        </PrimaryButton>
-                                    </div>
-                                </div>
-                            )}
-                        </Popup>
-                        <Popup
                             ref={popupRef}
                             trigger={<PrimaryButton>Signer</PrimaryButton>}
                             modal
@@ -285,11 +206,54 @@ const NewContract = () => {
                                 );
                             }}
                         </Popup>
-                        <PrimaryButton disabled={!signature} onClick={() => handleValidate()} title={signature ? "" : "Veuillez signer le contrat pour valider"}>Valider</PrimaryButton>
+                        <Popup
+                            trigger={<PrimaryButton
+                                disabled={!signature}
+                                title={signature ? "" : "Veuillez signer le contrat pour valider"}>
+                                Aperçu
+                            </PrimaryButton>}
+                            modal
+                            nested
+                        >
+                            {close => (
+                                <div className="modal">
+                                    <button className="close" onClick={close}>
+                                        &times;
+                                    </button>
+                                    <div className="header"> Création d'un nouveau contrat </div>
+                                    <div className="content">
+                                        <div id="contract-to-print">
+                                            <ContractToPrint
+                                                texte={value}
+                                                signature={signature}
+                                                picturesContract={picturesContract}
+                                            // name={order.userFistName + " " + order.userLastName}
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="actions">
+                                        <PrimaryButton
+                                            className="button"
+                                            onClick={() => {
+                                                close();
+                                            }}
+                                        >
+                                            Retour
+                                        </PrimaryButton>
+                                        <PrimaryButton
+                                            onClick={handleValidate}>
+                                            Valider
+                                        </PrimaryButton>
+
+                                    </div>
+                                </div>
+                            )}
+                        </Popup>
+
                     </div>
                 </div>
             }
-        </div>
+        </div >
     )
 }
 

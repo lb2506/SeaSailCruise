@@ -92,7 +92,7 @@ export default function OrdersList() {
                         <Actions>
                             <AcceptBtn onClick={() => handleOrderDispatch(params.row.id)}>Accepter</AcceptBtn>
                             <RefuseBtn onClick={() => handleOrderRefused(params.row.id)}>Refuser</RefuseBtn>
-                            <View onClick={() => navigate(`/order/${params.row.id}`)}>Voir</View>
+                            <View onClick={() => navigate(`/booking/${params.row.id}`)}>Voir</View>
                             <Contract onClick={() => navigate(`/booking/new-contract/${params.row.id}`)}>Créer contrat</Contract>
                         </Actions>
                     </>
