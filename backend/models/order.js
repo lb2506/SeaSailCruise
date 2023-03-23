@@ -8,7 +8,6 @@ const orderSchema = new mongoose.Schema(
     products: [],
     subtotal: { type: Number, required: false },
     total: { type: Number, required: false },
-    // shipping: { type: Object, required: true },
     order_status: { type: String, default: "pending" },
     payment_status: { type: String, required: false },
     type: { type: String, required: true },

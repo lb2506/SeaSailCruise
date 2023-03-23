@@ -120,6 +120,7 @@ let CreateBooking = () => {
                 total: product.price * dureeLoc,
                 payment_status: "A régler sur place",
                 type: reservationType,
+                contract: {},
             })
         )
     }

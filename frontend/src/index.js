@@ -9,7 +9,7 @@ import productsReducer, { productsFetch } from "./slices/productsSlice";
 import cartReducer, { getTotals } from "./slices/cartSlice";
 import authReducer from "./slices/authSlice";
 import { productsApi } from "./slices/productsApi";
-import ordersReducer from "./slices/ordersSlice";
+import ordersReducer, { ordersFetch } from "./slices/ordersSlice";
 import usersReducer, { usersFetch } from "./slices/usersSlice";
 import contractsReducer, { contractsFetch } from "./slices/contractsSlice";
 
@@ -29,8 +29,9 @@ const store = configureStore({
 
 store.dispatch(productsFetch());
 store.dispatch(contractsFetch());
-store.dispatch(usersFetch())
+store.dispatch(usersFetch());
 store.dispatch(getTotals());
+store.dispatch(ordersFetch());
 
 ReactDOM.render(
   <React.StrictMode>

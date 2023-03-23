@@ -8,29 +8,24 @@ import { addToCart } from "../../slices/cartSlice";
 import Slider from './Slider';
 import DateRangeComp from "./DatePicker";
 
-import { addDays } from 'date-fns'
-
 const Product = () => {
 
     const params = useParams();
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const [product, setProduct] = useState({});
     const [loading, setLoading] = useState(false);
-
     const [dateBooked, setDateBooked] = useState([]);
     const [disabledDates, setDisabledDates] = useState([]);
-
     const [choiceGuide, setChoiceGuide] = useState("");
-
     const [range, setRange] = useState([
         {
             startDate: new Date(),
-            endDate: addDays(new Date(), 1),
+            endDate: new Date(),
             key: 'selection'
         }
     ])
+    const [errorDate, setErrorDate] = useState(false)
 
     var ONE_DAY = 1000 * 60 * 60 * 24;
 
@@ -95,11 +90,22 @@ const Product = () => {
 
     }, [dateBooked, ONE_DAY])
 
+    useEffect(() => {
+        let error = false;
+        disabledDates.map((date) => {
+            if (date.toLocaleDateString('fr-FR') === range[0].startDate.toLocaleDateString('fr-FR')) {
+                error = true;
+            }
+        })
+        setErrorDate(error)
+    }, [disabledDates, range]);
 
     const handleAddToCart = ({ product, dureeLoc, locStart, locEnd, choiceGuide }) => {
         dispatch(addToCart({ product, dureeLoc, locStart, locEnd, choiceGuide }))
         navigate("/cart")
     }
+
+    const cartItems = JSON.parse(localStorage.getItem("cartItems")) || [];
 
     return (
         <StyledProduct>
@@ -332,15 +338,27 @@ const Product = () => {
                         }
                     </form>
                     <div className="btn-group">
-                        {choiceGuide === "" ?
-                            <button className="product-add-to-cart" style={{ backgroundColor: '#8498d3' }} disabled>Sélectionnez une option</button>
+                        {cartItems.length > 0 ?
+                            <p>Vous ne pouvez effectuer qu'une réservation à la fois. Veuillez terminer celle en cours ou la supprimer du panier pour accéder à une nouvelle réservation</p>
                             :
-                            <button className="product-add-to-cart" onClick={() => handleAddToCart({ product, dureeLoc, locStart, locEnd, choiceGuide })}>Réserver</button>
+                            (errorDate === true ?
+                                <button className="product-add-to-cart" style={{ backgroundColor: '#8498d3' }} disabled>Date(s) indisponible(s)</button>
+                                : choiceGuide === ""  ?
+                                <button className="product-add-to-cart" style={{ backgroundColor: '#8498d3' }} disabled>Sélectionnez une option</button>
+                                :
+                                <button className="product-add-to-cart" onClick={() => handleAddToCart({ product, dureeLoc, locStart, locEnd, choiceGuide })}>Réserver</button>
+                            )
                         }
-                        <p>- Ou -</p>
-                        <button className="product-contact">Contacter</button>
-                        <p>✓ Sans engagement</p>
-                        <p>Voir la grille tarifaire</p>
+                        {cartItems.length > 0 ?
+                            <button className="product-add-to-cart" onClick={() => navigate("/cart")}>Aller au panier</button>
+                            :
+                            <>
+                                <p>- Ou -</p>
+                                <button className="product-contact">Contacter</button>
+                                <p>✓ Sans engagement</p>
+                                <p>Voir la grille tarifaire</p>
+                            </>
+                        }
                     </div>
                 </RentContainer>
             </ContainerGlobal>
@@ -373,7 +391,7 @@ const RentContainer = styled.div`
     margin-left: 50px;
     box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
     border-radius: 5px;
-    min-width: 348px;
+    width: 500px;
     height: fit-content;
     position: sticky;
     top: 100px

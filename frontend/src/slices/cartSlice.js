@@ -29,9 +29,6 @@ const cartSlice = createSlice({
       } else {
         let tempProductItem = { ...action.payload.product, dureeLocation: action.payload.dureeLoc, startLocation: action.payload.locStart, endLocation: action.payload.locEnd, choiceGuide: action.payload.choiceGuide };
         state.cartItems.push(tempProductItem);
-        toast.success("Product added to cart", {
-          position: "bottom-left",
-        });
       }
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
     },

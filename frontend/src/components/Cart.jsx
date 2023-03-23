@@ -36,7 +36,7 @@ const Cart = () => {
   };
   return (
     <div className="cart-container">
-      <h2>Vos commandes</h2>
+      <h2>Récapitulatif de votre réservation</h2>
       {cart.cartItems.length === 0 ? (
         <div className="cart-empty">
           <p>Votre panier est actuellement vide</p>
@@ -84,18 +84,14 @@ const Cart = () => {
                       <p>Début de la location : {cartItem.startLocation} </p>
                       <p>Fin de la location : {cartItem.endLocation}</p>
                       <p>Durée totale de location : {cartItem.dureeLocation === 1 ? `${cartItem.dureeLocation} jour` : `${cartItem.dureeLocation} jours`}</p>
-                      <button onClick={() => handleRemoveFromCart(cartItem)}>
+                      {/* <button onClick={() => handleRemoveFromCart(cartItem)}>
                         Supprimer
-                      </button>
+                      </button> */}
                     </div>
                   </div>
                   <div className="cart-product-price">{cartItem.price} €</div>
                   <div className="cart-product-quantity">
-                    {/* <button onClick={() => handleDecreaseCart(cartItem)}>
-                      -
-                    </button> */}
                     <div className="count">{cartItem.dureeLocation}</div>
-                    {/* <button onClick={() => handleAddToCart(cartItem)}>+</button> */}
                   </div>
                   <div className="cart-product-total-price">
                     {cartItem.price * cartItem.dureeLocation} €
@@ -112,7 +108,6 @@ const Cart = () => {
                 <span>Sous-total</span>
                 <span className="amount">{cart.cartTotalAmount} €</span>
               </div>
-              <p>Taxes et livraison calculées lors du paiement</p>
               {auth._id ? (
                 <PayButton cartItems={cart.cartItems} />
               ) : (
@@ -120,7 +115,7 @@ const Cart = () => {
                   className="cart-login"
                   onClick={() => navigate("/login")}
                 >
-                  Se connecter et passer à la suite
+                  COnnectez-vous pour continuer
                 </button>
               )}
 

@@ -1,19 +1,21 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactQuill from "react-quill";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { PrimaryButton } from "../admin/CommonStyled";
 import Popup from 'reactjs-popup';
 import 'reactjs-popup/dist/index.css';
 import SignatureCanvas from 'react-signature-canvas'
 import ContractToPrint from "./ContractToPrint";
-import JsPDF from 'jspdf';
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { ordersContract } from "../../slices/ordersSlice";
 
 
 const NewContract = () => {
 
-    // const params = useParams();
-    // const { list } = useSelector((state) => state.orders);
+    const params = useParams();
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const { newStatus } = useSelector((state) => state.orders);
     const { contracts } = useSelector((state) => state.contracts);
 
     const [value, setValue] = useState("");
@@ -22,8 +24,6 @@ const NewContract = () => {
     const [contractDetails, setContractDetails] = useState(null);
     const [signature, setSignature] = useState(null);
     const [signaturePresente, setSignaturePresente] = useState(false);
-    // const [order, setOrder] = useState(null);
-
 
     const sigCanvas = useRef(null);
     const popupRef = useRef();
@@ -36,13 +36,6 @@ const NewContract = () => {
         }
 
     }, [selectedContract])
-
-    // useEffect(() => {
-    //     if (params.id) {
-    //         const order = list.find(item => item._id === params.id);
-    //         setOrder(order);
-    //     }
-    // }, [params.id])
 
     const handlePicturesContract = (e) => {
         const files = e.target.files;
@@ -85,20 +78,17 @@ const NewContract = () => {
         sigCanvas.current.clear()
     };
 
-    const handleValidate = async () => {
-        var doc = new JsPDF("p", "pt", "a4");
-        var source = document.querySelector("#contract-to-print");
-        var margins = [50, 0, 50, 0]; // top, right, bottom, left
-        var options = {
-            // Options pour la conversion HTML en PDF
-            callback: function (dispose) {
-                // dispose: object with X, Y of the last line add to the PDF
-                //          this allow the insertion of new lines after html
-                doc.save("Test.pdf");
-            },
-            margin: margins,
-        };
-        doc.html(source, options);
+
+    const handleValidate = async (id) => {
+        dispatch(ordersContract({
+            id,
+            data: {
+                value,
+                signature,
+                picturesContract
+            }
+        }))
+        navigate('/admin/bookings')
     };
 
 
@@ -241,10 +231,9 @@ const NewContract = () => {
                                             Retour
                                         </PrimaryButton>
                                         <PrimaryButton
-                                            onClick={handleValidate}>
-                                            Valider
+                                            onClick={() => handleValidate(params.id)}>
+                                            {newStatus === "pending" ? 'En cours...' : 'Valider'}
                                         </PrimaryButton>
-
                                     </div>
                                 </div>
                             )}

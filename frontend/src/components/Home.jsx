@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import logoWhite from "../assets/images/logoWhite.png";
 
 const Home = () => {
-  const { items: data, status } = useSelector((state) => state.products);
+  const { items, status } = useSelector((state) => state.products);
 
   return (
     <div className="global-container">
@@ -24,8 +24,8 @@ const Home = () => {
 
             </div>
             <div className="products">
-              {data &&
-                data?.map((product) => (
+              {items &&
+                items?.map((product) => (
                   (product.visible === true &&
                     <div key={product._id} className="product">
                       <Link to={`/product/${product._id}`}>

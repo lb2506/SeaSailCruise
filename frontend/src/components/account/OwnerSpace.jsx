@@ -42,6 +42,8 @@ const OwnerSpace = () => {
             key: 'selection'
         }
     ])
+    
+    const firstAvailableDate = new Date(disabledDates[0]);
 
     const ONE_DAY = 1000 * 60 * 60 * 24;
 

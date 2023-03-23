@@ -60,6 +60,5 @@ const NavbarAccount = styled.div`
 
 
 const Content = styled.div`
-  margin-left: 200px;
   padding: 2rem 3rem;
 `;

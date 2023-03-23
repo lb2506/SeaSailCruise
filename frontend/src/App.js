@@ -22,7 +22,7 @@ import Summary from "./components/admin/Summary";
 import CreateProduct from "./components/admin/CreateProduct";
 import ProductsList from "./components/admin/list/ProductsList";
 import Product from "./components/Details/Product";
-import Order from "./components/Details/Order";
+import Booking from "./components/Details/Booking";
 import UserProfile from "./components/Details/UserProfile";
 import UserAccount from "./components/account/UserAccount";
 import UserOrders from "./components/account/UserOrders";
@@ -39,6 +39,7 @@ import OwnersList from "./components/admin/list/OwnersList";
 import CreateOwner from "./components/admin/CreateOwner";
 import OwnerSpace from "./components/account/OwnerSpace";
 import NewContract from "./components/Details/NewContract";
+import ViewContract from "./components/Details/ViewContract";
 
 
 function App() {
@@ -61,10 +62,11 @@ function App() {
             <Route path="/register" element={<Register />} />
             <Route path="/login" element={<Login />} />
             <Route path="/product/:id" element={<Product />} />
-            <Route path="/booking/:id" element={<Order />} />
-            <Route path="/booking/new-contract/:id" element={<NewContract />} />
             <Route path="/user/:id" element={<UserProfile />} />
             <Route path="/admin" element={<Dashboard />}>
+              <Route path="booking/:id" element={<Booking />} />
+              <Route path="booking/new-contract/:id" element={<NewContract />} />
+              <Route path="booking/view-contract/:id" element={<ViewContract />} />
               <Route path="summary" element={<Summary />} />
               <Route path="products" element={<Products />}>
                 <Route index element={<ProductsList />} />

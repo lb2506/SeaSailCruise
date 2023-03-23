@@ -16,43 +16,29 @@ const DateRangeComp = ({ handleChange, disabledDates }) => {
   const [range, setRange] = useState([
     {
       startDate: new Date(),
-      endDate: addDays(new Date(), 1),
+      endDate: new Date(),
       key: 'selection'
     }
   ])
-
-  // console.log(locStart, locEnd, dureeLoc);
-
-
-  // open close
   const [open, setOpen] = useState(false)
-
-  // get the target element to toggle 
   const refOne = useRef(null)
 
   useEffect(() => {
-    // event listeners
     document.addEventListener("keydown", hideOnEscape, true)
     document.addEventListener("click", hideOnClickOutside, true)
   }, [])
 
-  // hide dropdown on ESC press
   const hideOnEscape = (e) => {
-    // console.log(e.key)
     if (e.key === "Escape") {
       setOpen(false)
     }
   }
 
-  // Hide on outside click
   const hideOnClickOutside = (e) => {
-    // console.log(refOne.current)
-    // console.log(e.target)
     if (refOne.current && !refOne.current.contains(e.target)) {
       setOpen(false)
     }
   }
-
 
   return (
     <div className="calendarWrap">

@@ -15,8 +15,8 @@ const UserOrders = () => {
             setIsLoading(true);
             try {
                 const res = await axios.get(`${url}/orders/find/${userId}`, setHeaders());
-
                 setUserOrders(res.data);
+                console.log(res.data);
             } catch (err) {
                 console.log(err);
             }

@@ -9,6 +9,7 @@ const initialState = {
     status: null,
     createStatus: null,
     deleteStatus: null,
+    newStatus: null,
 };
 
 export const ordersFetch = createAsyncThunk("orders/ordersFetch", async () => {
@@ -31,9 +32,9 @@ export const ordersDelete = createAsyncThunk("orders/ordersDelete", async (id) =
 }
 );
 
-export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (value) => {
+export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (values) => {
     try {
-        const response = await axios.post(`${url}/orders`, value, setHeaders());
+        const response = await axios.post(`${url}/orders`, values, setHeaders());
         return response.data;
     } catch (error) {
         console.log(error);
@@ -43,8 +44,6 @@ export const ordersCreate = createAsyncThunk("orders/ordersCreate", async (value
 
 export const ordersEditStatusOrder = createAsyncThunk("orders/ordersEditStatusOrder", async (values, { getState }) => {
     const state = getState();
-
-
 
     let currentOrder = state.orders.list.filter(
         (order) => order._id === values.id
@@ -92,6 +91,30 @@ export const ordersEditStatusPayment = createAsyncThunk("orders/ordersEditStatus
         console.log(err)
     }
 });
+
+export const ordersContract = createAsyncThunk("orders/ordersContract", async (values, { getState }) => {
+    const state = getState();
+
+    let currentOrder = state.orders.list.filter(
+        (order) => order._id === values.id
+    );
+
+    const newOrder = {
+        ...currentOrder[0],
+        contract: values.data
+    };
+
+    try {
+        const response = await axios.put(
+            `${url}/orders/${values.id}`,
+            newOrder,
+            setHeaders()
+        )
+        return response.data;
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 
 const ordersSlice = createSlice({
@@ -159,6 +182,25 @@ const ordersSlice = createSlice({
         },
         [ordersEditStatusPayment.rejected]: (state, action) => {
             state.status = "rejected";
+        },
+        [ordersContract.pending]: (state, action) => {
+            state.newStatus = "pending";
+        },
+        [ordersContract.fulfilled]: (state, action) => {
+            const updatedOrders = state.list.map((order) =>
+                order._id === action.payload._id ? action.payload : order
+            );
+            state.list = updatedOrders;
+            state.newStatus = "success";
+            toast.success("Action réussie avec succès !", {
+                position: "bottom-left",
+            });
+        },
+        [ordersContract.rejected]: (state) => {
+            state.newStatus = "rejected";
+            toast.error("Oups, il y a un problème ... Veuillez essayer de nouveau", {
+                position: "bottom-left",
+            });
         }
     }
 })

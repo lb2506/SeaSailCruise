@@ -14,8 +14,7 @@ export default function OrdersList() {
 
     useEffect(() => {
         dispatch(ordersFetch())
-    }, [dispatch]);
-
+    }, [list]);
 
     const rows = list && list.map(order => {
         return {
@@ -25,7 +24,8 @@ export default function OrdersList() {
             oStatus: order.order_status,
             date: moment(order.createdAt).locale('fr').format('dddd DD MMMM YYYY'),
             type: order.type,
-            payment: order.payment_status
+            payment: order.payment_status,
+            contract: order.contract
         }
     })
 
@@ -62,9 +62,6 @@ export default function OrdersList() {
             }
         },
         {
-            field: 'contract', headerName: 'Contrat', width: 150
-        },
-        {
             field: 'acceptPayment',
             headerName: 'Paiement',
             sortable: false,
@@ -92,8 +89,12 @@ export default function OrdersList() {
                         <Actions>
                             <AcceptBtn onClick={() => handleOrderDispatch(params.row.id)}>Accepter</AcceptBtn>
                             <RefuseBtn onClick={() => handleOrderRefused(params.row.id)}>Refuser</RefuseBtn>
-                            <View onClick={() => navigate(`/booking/${params.row.id}`)}>Voir</View>
-                            <Contract onClick={() => navigate(`/booking/new-contract/${params.row.id}`)}>Créer contrat</Contract>
+                            <View onClick={() => navigate(`/admin/booking/${params.row.id}`)}>Voir</View>
+                            {params.row.contract ?
+                                <Contract onClick={() => navigate(`/admin/booking/view-contract/${params.row.id}`)}>Voir le contrat</Contract>
+                                :
+                                <Contract onClick={() => navigate(`/admin/booking/new-contract/${params.row.id}`)}>Créer contrat</Contract>
+                            }
                         </Actions>
                     </>
                 )

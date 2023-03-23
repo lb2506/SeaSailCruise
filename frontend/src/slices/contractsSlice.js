@@ -11,14 +11,16 @@ const initialState = {
     deleteStatus: null,
 };
 
-export const contractsCreate = createAsyncThunk('contracts/contractsCreate', async (value) => {
-    try {
-        const response = await axios.post(`${url}/contracts`, value, setHeaders());
-        return response.data;
-    } catch (error) {
-        console.log(error);
+export const contractsCreate = createAsyncThunk(
+    'contracts/contractsCreate',
+    async (value) => {
+        try {
+            const response = await axios.post(`${url}/contracts`, value, setHeaders());
+            return response.data;
+        } catch (error) {
+            console.log(error);
+        }
     }
-}
 )
 
 export const contractsFetch = createAsyncThunk(
