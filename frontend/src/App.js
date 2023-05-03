@@ -54,7 +54,6 @@ function App() {
       <BrowserRouter>
         <ToastContainer />
         <NavBar />
-        <div className="content-container">
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
@@ -95,7 +94,6 @@ function App() {
             <Route path="/checkout" element={<Payment />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
-        </div>
       </BrowserRouter>
     </div>
   );

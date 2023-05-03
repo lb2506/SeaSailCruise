@@ -8,11 +8,9 @@ import {
 } from "../slices/cartSlice";
 
 import { Link } from "react-router-dom";
-import PayButton from "./PayButton";
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
-  // console.log(cart);
   const auth = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
@@ -22,18 +20,20 @@ const Cart = () => {
     dispatch(getTotals());
   }, [cart, dispatch]);
 
-  // const handleAddToCart = (product) => {
-  //   dispatch(addToCart(product));
+  // const handleRemoveFromCart = (product) => {
+  //   dispatch(removeFromCart(product));
   // };
-  // const handleDecreaseCart = (product) => {
-  //   dispatch(decreaseCart(product));
-  // };
-  const handleRemoveFromCart = (product) => {
-    dispatch(removeFromCart(product));
-  };
+
   const handleClearCart = () => {
     dispatch(clearCart());
   };
+
+  const handleCheckout = () => {
+
+    // Vérifier si les dates sont encore dispo
+    navigate("/checkout");
+  };
+
   return (
     <div className="cart-container">
       <h2>Récapitulatif de votre réservation</h2>
@@ -109,13 +109,13 @@ const Cart = () => {
                 <span className="amount">{cart.cartTotalAmount} €</span>
               </div>
               {auth._id ? (
-                <PayButton cartItems={cart.cartItems} />
+                <button onClick={() => handleCheckout()}>Payer</button>
               ) : (
                 <button
                   className="cart-login"
                   onClick={() => navigate("/login")}
                 >
-                  COnnectez-vous pour continuer
+                  Connectez-vous pour continuer
                 </button>
               )}
 

@@ -47,12 +47,7 @@ const cartSlice = createSlice({
         const nextCartItems = state.cartItems.filter(
           (item) => item._id !== action.payload._id
         );
-
         state.cartItems = nextCartItems;
-
-        // toast.error("Product removed from cart", {
-        //   position: "bottom-left",
-        // });
       }
 
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
@@ -65,10 +60,6 @@ const cartSlice = createSlice({
           );
 
           state.cartItems = nextCartItems;
-
-          // toast.error("Product removed from cart", {
-          //   position: "bottom-left",
-          // });
         }
         localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
         return state;
@@ -97,7 +88,6 @@ const cartSlice = createSlice({
     clearCart(state, action) {
       state.cartItems = [];
       localStorage.setItem("cartItems", JSON.stringify(state.cartItems));
-      // toast.error("Cart cleared", { position: "bottom-left" });
     },
   },
 });
